@@ -1,0 +1,482 @@
+<div class="container-fluid">
+  <div class="row">
+    <div [ngClass]="showBulkupload_product ? 'col-md-7 pr-0' : 'col-md-11 p-5'">
+      <!-- ORDER HISTORY START -->
+      <h3 class="upload_title" *ngIf="showBulkupload_product">Upload store inventory and maintain</h3>
+      <div class="dropzone" fileDragDrop (filesChangeEmiter)="onFileChange($event)" *ngIf="showBulkupload_product">
+        <div class="text-wrapper">
+          <div class="centered">
+            <input type="file" name="file" id="file" (change)="onFileChange($event.target.files)" multiple />
+            <div class="choose_box">
+              <img src="../../assets/product/csv.png" alt="csv" />
+              <div class="label">
+                <img src="../../assets/product/up.png" alt="uploadicon" />
+                <label for="file">Drag and drop or <span>Browse</span> Products CSV files</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="upload__btn" *ngIf="showBulkupload_product">
+        <button class="sample_btn" (click)="downloadFile()">
+          <img src="../../assets/product/download.png" alt="" /> Sample CSV
+        </button>
+        <input [hidden]="true" (change)="onFileSelect($event)" type="file" accept="all/*" #fileSelect />
+        <button matSuffix mat-icon-button class="upload_btn" (click)="fileSelect.click()" matTooltip="Bulk upload">
+          Upload
+        </button>
+      </div>
+      <div id="order_history">
+        <div class="container p-0">
+          <div class="row no-gutters">
+            <div class="col-md-12">
+              <div class="product_table" *ngIf="showProduct_table">
+                <table mat-table matSort [dataSource]="ProdTable" class="mat-elevation-z8">
+                  <ng-container matColumnDef="sno">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>S.No</th>
+                    <td mat-cell *matCellDef="let element">{{ element.sno }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="product_code">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Code</th>
+                    <td mat-cell *matCellDef="let element">{{ element.product_code }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="imageUrl">
+                    <th mat-header-cell *matHeaderCellDef>Image</th>
+                    <td mat-cell *matCellDef="let element">
+                      <img style="padding: 4px; width: 59px; text-align: center" [src]="element.product_img" />
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="product_name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.product_name }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Product_category">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+                    <td mat-cell *matCellDef="let element">{{ element.Product_category }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Product_sku">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>SKU</th>
+                    <td mat-cell *matCellDef="let element">{{ element.Product_sku }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="action_btn">
+                        <mat-icon
+                          matTooltip="Edit product"
+                          class="action-icons"
+                          style="cursor: pointer"
+                          (click)="editProduct(element.id, element.product_name)"
+                          >edit</mat-icon
+                        >
+                        <mat-icon
+                          matTooltip="View product"
+                          class="action-icons"
+                          style="cursor: pointer"
+                          (click)="viewProduct(element.id, element.product_name)"
+                          >visibility</mat-icon
+                        >
+                        <mat-icon
+                          matTooltip="Delete product"
+                          class="action-icons"
+                          style="cursor: pointer"
+                          (click)="deleteProduct(element.id)"
+                          >delete
+                        </mat-icon>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <mat-paginator #paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+              </div>
+
+              <div class="product_tables" *ngIf="showEdit">
+                <form
+                  id="add_cus_forms"
+                  [formGroup]="edit_Productform"
+                  class="mat-card mat-elevation-z4 p-24 mr-24"
+                  style="flex-direction: column"
+                >
+                  <span class="edit_prod">Edit Product</span>
+                  <div class="form_row" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>Product Code *</mat-label>
+                      <input
+                        matInput
+                        formControlName="product_code"
+                        value=""
+                        [ngClass]="{ 'is-invalid': submitted && s.product_code.errors }"
+                        onKeyPress="if(this.value.length==15) return false;"
+                        required
+                      />
+                      <div *ngIf="submitted && s.product_code.errors" class="invalid-feedback">
+                        <div *ngIf="s.product_code.errors" class="form-err">Product Code is required</div>
+                      </div>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>Product Name *</mat-label>
+                      <input
+                        matInput
+                        formControlName="product_name"
+                        [ngClass]="{ 'is-invalid': submitted && s.product_name.errors }"
+                        onKeyPress="if(this.value.length==15) return false;"
+                        required
+                      />
+                      <div *ngIf="submitted && s.product_name.errors" class="invalid-feedback">
+                        <div *ngIf="s.product_name.errors" class="form-err">Product Name is required</div>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="form_row" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>Category *</mat-label>
+                      <mat-select
+                        [(ngModel)]="selectedCategory"
+                        (ngModelChange)="onOptionsSelected($event)"
+                        formControlName="category"
+                        [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
+                      >
+                        <mat-option *ngFor="let category of Getcategory" [value]="category.category_name">
+                          {{ category.category_name }}
+                        </mat-option>
+                      </mat-select>
+                      <!-- <input matInput formControlName="category"
+                        [ngClass]="{ 'is-invalid': submitted && s.category.errors }" required
+                        onKeyPress="if(this.value.length==15) return false;" /> -->
+                      <div *ngIf="submitted && s.category.errors" class="invalid-feedback">
+                        <div *ngIf="s.category.errors" class="form-err">Category Code is required</div>
+                      </div>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>Sub Category *</mat-label>
+                      <mat-select
+                        [(ngModel)]="selectedSubCategory"
+                        formControlName="subcategory"
+                        [ngClass]="{ 'is-invalid': submitted && f.subcategory.errors }"
+                      >
+                        <mat-option *ngFor="let category of Getsubcategory" [value]="category.category_name">
+                          {{ category.category_name }}
+                        </mat-option>
+                      </mat-select>
+                      <!-- <input matInput formControlName="subcategory"
+                        onKeyPress="if(this.value.length==15) return false;" /> -->
+                      <div *ngIf="submitted && s.subcategory.errors" class="invalid-feedback">
+                        <div *ngIf="s.subcategory.errors" class="form-err">Sub Category Name is required</div>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="form_row" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <input
+                        [hidden]="true"
+                        (change)="onFileSelect_img($event)"
+                        type="file"
+                        accept="all/*"
+                        #fileSelect
+                      />
+                      <input
+                        readonly
+                        matInput
+                        formControlName="profile_pic"
+                        placeholder="Choose profile Image..."
+                        [(ngModel)]="profile_name"
+                      />
+                      <button
+                        matSuffix
+                        mat-icon-button
+                        class="upload_btns"
+                        (click)="fileSelect.click()"
+                        matTooltip="Select a Image file"
+                      >
+                        <mat-icon>cloud_upload</mat-icon>
+                      </button>
+                      <div *ngIf="!imgType" class="invalid-feedback">
+                        <div *ngIf="!imgType" class="form-err">Please select JPEG/PNG file</div>
+                      </div>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>Price *</mat-label>
+                      <input matInput formControlName="price" onKeyPress="if(this.value.length==15) return false;" />
+                      <div *ngIf="submitted && s.price.errors" class="invalid-feedback">
+                        <div *ngIf="s.price.errors" class="form-err">Price is required</div>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="form_row" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>Tax *</mat-label>
+                      <input
+                        matInput
+                        formControlName="tax"
+                        [ngClass]="{ 'is-invalid': submitted && s.tax.errors }"
+                        required
+                        onKeyPress="if(this.value.length==15) return false;"
+                      />
+                      <div *ngIf="submitted && s.tax.errors" class="invalid-feedback">
+                        <div *ngIf="s.tax.errors" class="form-err">Tax is required</div>
+                      </div>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>SKU *</mat-label>
+                      <input
+                        matInput
+                        formControlName="sku"
+                        [ngClass]="{ 'is-invalid': submitted && s.sku.errors }"
+                        required
+                        onKeyPress="if(this.value.length==15) return false;"
+                      />
+                      <div *ngIf="submitted && s.sku.errors" class="invalid-feedback">
+                        <div *ngIf="s.sku.errors" class="form-err">SKU is required</div>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="form_row" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>Description *</mat-label>
+                      <input
+                        matInput
+                        formControlName="description"
+                        [ngClass]="{ 'is-invalid': submitted && s.description.errors }"
+                        required
+                        onKeyPress="if(this.value.length==150) return false;"
+                      />
+                      <div *ngIf="submitted && s.description.errors" class="invalid-feedback">
+                        <div *ngIf="s.description.errors" class="form-err">Description is required</div>
+                      </div>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
+                      <mat-label>Count *</mat-label>
+                      <input
+                        matInput
+                        formControlName="count"
+                        [ngClass]="{ 'is-invalid': submitted && s.count.errors }"
+                        required
+                      />
+                      <div *ngIf="submitted && s.count.errors" class="invalid-feedback">
+                        <div *ngIf="s.count.errors" class="form-err">Count is required</div>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="example-button-row add_button">
+                    <button mat-raised-button class="add_buttons" (click)="updateProduct()">Update</button>
+                    <button mat-raised-button (click)="cancel()">Cancel</button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="product_tables" *ngIf="showView">
+                <h4>View Product</h4>
+                <div class="cus_info_cont">
+                  <ul>
+                    <li>
+                      <p>Product Code :</p>
+                      <span>{{ product_code }}</span>
+                    </li>
+
+                    <li>
+                      <P>Product Name : </P><span>{{ product_name }}</span>
+                    </li>
+
+                    <li>
+                      <p>Category :</p>
+                      <span>{{ category }}</span>
+                    </li>
+
+                    <li>
+                      <p>Sub Category :</p>
+                      <span>{{ subcategory }}</span>
+                    </li>
+
+                    <li>
+                      <p>SKU :</p>
+                      <span>{{ sku }}</span>
+                    </li>
+
+                    <li>
+                      <p>Description :</p>
+                      <span>{{ description }}</span>
+                    </li>
+
+                    <li>
+                      <p>Price :</p>
+                      <span>{{ price }}</span>
+                    </li>
+
+                    <li>
+                      <p>Tax :</p>
+                      <span>{{ tax }}</span>
+                    </li>
+
+                    <li>
+                      <p>Count :</p>
+                      <span>{{ count }}</span>
+                    </li>
+
+                    <li>
+                      <p>Product Image</p>
+                      <img src="{{ profile_pic }}" style="width: 72px; text-align: center; object-fit: contain" />
+                    </li>
+                  </ul>
+                  <div class="example-button-row add_button">
+                    <button mat-raised-button (click)="cancel_view()">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ORDER HISTORY END -->
+    </div>
+    <div class="col-md-5" *ngIf="showBulkupload_product">
+      <div class="right_form">
+        <h6 class="r_form_title">Upload store inventory</h6>
+        <div class="form_errors">
+          <span *ngIf="submitted && f.product_id.errors?.required" class="error">Product ID field is required</span>
+          <span *ngIf="submitted && f.product_name.errors?.required" class="error">Product name field is required</span>
+          <span *ngIf="submitted && f.category.errors?.required" class="error">Category field is required</span>
+          <span *ngIf="submitted && f.sub_category.errors?.required" class="error">Sub category field is required</span>
+          <span *ngIf="submitted && f.sku.errors?.required" class="error">SKU field is required</span>
+          <span *ngIf="submitted && f.description.errors?.required" class="error">description field is required</span>
+          <span *ngIf="submitted && f.price.errors?.required" class="error">price field is required</span>
+          <span *ngIf="submitted && f.tax.errors?.required" class="error">tax field is required</span>
+          <span *ngIf="submitted && f.count.errors?.required" class="error">count field is required</span>
+        </div>
+        <div>
+          <form class="login-form product_form" [formGroup]="product_form" (ngSubmit)="createProduct()">
+            <div style="margin-bottom: 1vw" class="form-group">
+              <mat-form-field class="login-full-width">
+                <mat-label>Product ID</mat-label>
+                <input
+                  matInput
+                  value=""
+                  maxlength="15"
+                  formControlName="product_id"
+                  [ngClass]="{ 'is-invalid': submitted && f.product_id.errors }"
+                />
+              </mat-form-field>
+            </div>
+            <div style="margin-bottom: 1vw">
+              <mat-form-field class="login-full-width">
+                <mat-label>Product Name</mat-label>
+                <input
+                  matInput
+                  value=""
+                  maxlength="50"
+                  formControlName="product_name"
+                  [ngClass]="{ 'is-invalid': submitted && f.product_name.errors }"
+                />
+              </mat-form-field>
+            </div>
+            <div style="margin-bottom: 1vw">
+              <mat-form-field class="login-full-width">
+                <mat-label>Category</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedCategory"
+                  (selectionChange)="onOptionsSelected($event)"
+                  formControlName="category"
+                  [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
+                >
+                  <mat-option *ngFor="let category of Getcategory" [value]="category.category_name">
+                    {{ category.category_name }}
+                  </mat-option>
+                </mat-select>
+
+                <!-- <input matInput value="" formControlName="category" [ngClass]="{ 'is-invalid': submitted && f.category.errors }"/> -->
+              </mat-form-field>
+            </div>
+            <div style="margin-bottom: 1vw">
+              <mat-form-field class="login-full-width">
+                <mat-label>Sub Category</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedSubCategory"
+                  formControlName="sub_category"
+                  [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
+                >
+                  <mat-option *ngFor="let category of Getsubcategory" [value]="category.category_name">
+                    {{ category.category_name }}
+                  </mat-option>
+                </mat-select>
+                <!-- <input matInput value="" formControlName="sub_category" [ngClass]="{ 'is-invalid': submitted && f.sub_category.errors }"/> -->
+              </mat-form-field>
+            </div>
+            <div style="margin-bottom: 1vw">
+              <mat-form-field class="login-full-width">
+                <mat-label>SKU</mat-label>
+                <input
+                  matInput
+                  value=""
+                  maxlength="15"
+                  formControlName="sku"
+                  [ngClass]="{ 'is-invalid': submitted && f.sku.errors }"
+                />
+              </mat-form-field>
+            </div>
+            <div style="margin-bottom: 1vw">
+              <mat-form-field class="login-full-width">
+                <mat-label>Description</mat-label>
+                <input
+                  matInput
+                  value=""
+                  formControlName="description"
+                  maxlength="50"
+                  [ngClass]="{ 'is-invalid': submitted && f.description.errors }"
+                />
+              </mat-form-field>
+            </div>
+            <div style="margin-bottom: 1vw">
+              <mat-form-field class="login-full-width">
+                <mat-label>Price</mat-label>
+                <input
+                  type="number"
+                  matInput
+                  value=""
+                  formControlName="price"
+                  [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
+                />
+              </mat-form-field>
+            </div>
+            <div style="margin-bottom: 1vw" class="form-group">
+              <mat-form-field class="login-full-width">
+                <mat-label>Tax</mat-label>
+                <input
+                  matInput
+                  value=""
+                  [(ngModel)]="tax_amt"
+                  formControlName="tax"
+                  [ngClass]="{ 'is-invalid': submitted && f.tax.errors }"
+                />
+                <!-- <span  class="percentage">%</span> -->
+              </mat-form-field>
+            </div>
+            <div style="margin-bottom: 1vw">
+              <mat-form-field class="login-full-width">
+                <mat-label>Count</mat-label>
+                <input
+                  type="number"
+                  matInput
+                  value=""
+                  formControlName="count"
+                  [ngClass]="{ 'is-invalid': submitted && f.count.errors }"
+                />
+              </mat-form-field>
+            </div>
+
+            <button class="form_submit">Upload store inventory</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

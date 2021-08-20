@@ -1,0 +1,139 @@
+<div class="container-fluid p-0">
+  <div class="row no-gutters">
+    <div [ngClass]="sideBarOpen ? 'col-md-3 sidebar_container' : 'col-md-1 sidebar_container closed_sidebar'">
+      <div class="side_logo_cont">
+        <img *ngIf="sideBarOpen" src=".././../assets/login/logo.png" class="w-100 side_logo" alt="e-wayshop" />
+        <img
+          *ngIf="!sideBarOpen"
+          src=".././../assets/dashboard/white-icon.png"
+          class="w-100 side_logo"
+          alt="e-wayshop"
+        />
+        <a href="javascript:void(0);" class="menu_bar" (click)="sideBarOpen = !sideBarOpen"
+          ><img class="menu_img" src="../../assets/dashboard/menu-bar.png" alt=""
+        /></a>
+      </div>
+
+      <div class="side_menu_container">
+        <ul class="sidemenu_list">
+          <a class="has_submenu">
+            <li [routerLinkActive]="['active']" routerLink="/home">
+              <span class="menu__icon" matTooltip="Dashboard"
+                ><img src="../../assets/dashboard/dashboard.png" alt="" /></span
+              ><span *ngIf="sideBarOpen">Dashboard</span>
+            </li>
+          </a>
+          <a class="has_submenu">
+            <li [routerLinkActive]="['active']">
+              <span class="menu__icon"><img src="../../assets/dashboard/configstore.png" alt="" /></span
+              ><span *ngIf="sideBarOpen">Configure Store</span>
+            </li>
+
+            <div class="inner_menu">
+              <ul>
+                <li routerLink="/product">
+                  <span class="menu__icon"><img src="../../assets/dashboard/upload.png" alt="" /></span
+                  ><span>Upload product details</span>
+                </li>
+                <li routerLink="/discount">
+                  <span class="menu__icon"><img src="../../assets/dashboard/discount.png" alt="" /></span
+                  ><span> Discount</span>
+                </li>
+              </ul>
+            </div>
+          </a>
+          <a class="has_submenu">
+            <li routerLink="/orders">
+              <span class="menu__icon" matTooltip="Order Management"
+                ><img src="../../assets/dashboard/order.png" alt="" /></span
+              ><span *ngIf="sideBarOpen">Order Management</span>
+            </li>
+          </a>
+
+          <a class="has_submenu">
+            <li routerLink="/order-history">
+              <span class="menu__icon" matTooltip="Order History"
+                ><img src="../../assets/dashboard/orderhis.png" alt="" /></span
+              ><span *ngIf="sideBarOpen">Order History</span>
+            </li>
+          </a>
+
+          <a class="has_submenu">
+            <li routerLink="/notification" *ngIf="notifyBadge != '0'">
+              <span class="menu__icon" matTooltip="Notifications"
+                ><img src="../../assets/dashboard/notification.png" alt=""
+              /></span>
+              <span matBadge="{{ notifyBadge }}" matBadgeSize="large" style="right: -27px !important"
+                ><span *ngIf="sideBarOpen" style="margin-left: -31px">Notifications</span></span
+              >
+            </li>
+            <li routerLink="/notification" *ngIf="notifyBadge == '0'">
+              <span class="menu__icon" matTooltip="Notifications"
+                ><img src="../../assets/dashboard/notification.png" alt=""
+              /></span>
+              <span *ngIf="sideBarOpen" style="margin-left: -2px">Notifications</span>
+            </li>
+          </a>
+        </ul>
+      </div>
+    </div>
+    <div [ngClass]="sideBarOpen ? 'col-md-9 main_cont_container' : 'col-md-11 main_cont_container'">
+      <!-- TOPBAR START-->
+      <div class="top_bar">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 hide_mobile">
+              <div class="search_box">
+                <form class="top_search_form">
+                  <!-- <mat-form-field class="top_search">
+                    <input matInput hideRequiredMarker placeholder="Search here" />
+                    <span class="search_icon"><img src="../../assets/dashboard/search_icon.png" alt="" /></span>
+                  </mat-form-field> -->
+                </form>
+                <!-- <div class="top_icon">
+                  <span class="noti_icon"><span matBadge="{{notifyBadge}}" matBadgeSize="large" style="right: -27px !important;"><img src="../../assets/dashboard/bell.png" alt="" /></span></span>
+                  <span class="noti_icon"><img src="../../assets/dashboard/gear.png" alt="" (click)="setting()" style="cursor: pointer;"/></span>
+                </div> -->
+              </div>
+            </div>
+            <div class="col-md-4 menu_bar_mobile">
+              <div class="mobile_icon top_icon d-md-none">
+                <a href="javascript:void(0);" class="menu_bar" (click)="sideBarOpen = !sideBarOpen"
+                  ><img src="../../assets/dashboard/menu-bar.png" alt=""
+                /></a>
+                <!-- <span class="noti_icon"><span matBadge="{{notifyBadge}}" matBadgeSize="large" style="right: -27px !important;"><img src="../../assets/dashboard/bell.png" alt="" /></span></span>
+                <span class="noti_icon"><img src="../../assets/dashboard/gear.png" alt="" (click)="setting()" style="cursor: pointer;" /></span> -->
+              </div>
+              <div class="user_profile">
+                <h6 class="pf_name">{{ profileName }}</h6>
+                <img
+                  *ngIf="profilePic != null"
+                  src="{{ profilePic }}"
+                  class="profile_img"
+                  alt="profile_image"
+                  (click)="notify()"
+                />
+                <img
+                  *ngIf="profilePic == null"
+                  src="../../assets/dashboard/profile_img.jpg"
+                  class="profile_img"
+                  alt="profile_image"
+                  (click)="notify()"
+                />
+              </div>
+              <div class="dropdown-content" *ngIf="showNotification">
+                <a (click)="profile()" style="cursor: pointer"> Profile <br /> </a>
+                <a (click)="logout()" style="cursor: pointer"> Logout <br /> </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--TOPBAR END-->
+      <router-outlet></router-outlet>
+
+      <!-- INNER CONTAINER END -->
+    </div>
+    <!-- MAIN CONTAINER END -->
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="container-fluid p-0">
+  <div class="row no-gutters">
+    <div class="col-md-7">
+      <div class="left__login_content">
+        <img src="../../assets/login/white_logo.png" alt="" />
+        <div class="login__left__content">
+          <h5>We Are ewayshops</h5>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+          <span class="copyright"> @ ewayshop 2021, All Rights Reserved. </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="right_container" style="height: 100vh; position: relative; background-color: #ffffff">
+        <div class="right_content">
+          <img src="../../assets/login/logo.png" class="color_logo w-100" alt="eWayShop-logo" />
+          <div class="login_form">
+            <h3>Login</h3>
+            <p>Welcome Back, Please login to your account</p>
+
+            <div class="form_errors">
+              <span *ngIf="submitted && f.email.errors?.required" class="error">Email is required</span>
+              <span *ngIf="submitted && f.email.errors?.email" class="error">Please enter the valid email address</span>
+              <span *ngIf="submitted && f.password.errors?.required" class="error">Password is required</span>
+            </div>
+            <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+              <mat-form-field class="login-full-width">
+                <mat-label>Email Address</mat-label>
+                <input matInput formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                <!-- <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                  <div *ngIf="f.email.errors" class="form-err">Email address field is required</div>
+                  <div *ngIf="f.email.errors.email" class="form-err">Email address must be a valid email address</div>
+              </div> -->
+              </mat-form-field>
+
+              <mat-form-field class="login-full-width password_field">
+                <mat-label>Password</mat-label>
+                <input
+                  matInput
+                  [type]="show_button ? 'text' : 'password'"
+                  formControlName="password"
+                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                  matInput
+                  showHideInput
+                />
+                <div class="show_password" (click)="showPass()">
+                  <mat-icon [ngClass]="show ? 'visibility' : 'visibility_off'" matSuffix class="secondary-text">
+                  </mat-icon>
+                </div>
+              </mat-form-field>
+              <a href="javascript:void(0);" class="forget-link_new" [routerLink]="['/forgot']">Forgot password</a>
+              <div class="login_btn_container">
+                <button type="button" (click)="login()" class="login_btn">Login</button>
+                <button type="button" class="sign_btn" [routerLink]="['/signup']">Signup</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

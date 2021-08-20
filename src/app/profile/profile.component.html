@@ -1,0 +1,178 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="profile_container">
+        <img
+          *ngIf="profile_name == null"
+          src="../../assets/dashboard/profile_img.jpg"
+          class="profile_image"
+          alt="profile_image"
+        />
+        <img *ngIf="profile_name != null" src="{{ profile_name }}" class="profile_image" alt="profile_image" />
+        <div class="profile_info">
+          <h6 class="prfoile_name">{{ profileName }}</h6>
+          <span class="shop_name">{{ branch_name }} </span>
+          <h6 class="shop_id">{{ branch_address }}</h6>
+        </div>
+        <div class="orders_info">
+          <div class="order_box">
+            <img src="../../assets/profile/person.png" alt="order" />
+            <h3 class="count">{{ Getcustomer_count }}</h3>
+            <span>Customers</span>
+          </div>
+          <div class="order_box">
+            <img src="../../assets/profile/bag.png" alt="order" />
+            <h3 class="count">{{ GetOrders_count }}</h3>
+            <span>Orders</span>
+          </div>
+        </div>
+        <div class="profile_des" *ngIf="branch_description" !="">
+          <h4>Description</h4>
+          <p>
+            {{ branch_description }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="profile_form_container">
+        <div class="profile__head">
+          <h5>Shop Setup</h5>
+          <!-- <div class="toggle_form">
+            <span>Edit</span>
+            <mat-slide-toggle  [(ngModel)]="device" (click)="editEnable()"></mat-slide-toggle>
+          </div> -->
+        </div>
+        <div class="profile_form">
+          <form>
+            <div class="form_row">
+              <label>Name</label>
+
+              <input type="text" class="form__input" name="Name" [(ngModel)]="Name" />
+              <!-- <span><img src="../../assets/profile/map.png" alt="mapicon"></span> -->
+            </div>
+            <p style="color: red" [hidden]="validname">Name is required</p>
+            <div class="form_row">
+              <label>Address</label>
+              <input
+                type="text"
+                class="form__input address_input"
+                #search
+                (keydown.enter)="$event.preventDefault()"
+                name="Address"
+                [(ngModel)]="Address"
+                id="searchTextField1"
+                onKeyPress="if(this.value.length==25) return false;"
+              />
+
+              <!-- <span><img src="../../assets/profile/map.png" alt="mapicon" /></span> -->
+            </div>
+            <p style="color: red" [hidden]="validaddress">Address is required</p>
+            <div class="form_row">
+              <label>Email Address</label>
+              <input type="text" [disabled]="isDisabled" class="form__input" name="email" [(ngModel)]="email" />
+              <span><img src="../../assets/profile/mail.png" alt="mapicon" /></span>
+            </div>
+            <p style="color: red" [hidden]="validemail">Email is required</p>
+            <div class="form_row">
+              <label>Phone Number</label>
+              <input type="text" class="form__input" name="phone_no" [(ngModel)]="phone_no" />
+              <span><img src="../../assets/profile/phone.png" alt="mapicon" /></span>
+            </div>
+            <p style="color: red" [hidden]="validphoneno">Phone number is required</p>
+            <div class="form_row">
+              <label>Zipcode</label>
+              <input type="text" class="form__input" maxlength="6" name="zipcode" [(ngModel)]="zipcode" />
+              <!-- <span><img src="../../assets/profile/phone.png" alt="mapicon" /></span> -->
+            </div>
+            <p style="color: red" [hidden]="validzipcode">Zipcode is required</p>
+            <div class="form_row">
+              <label>Profile Image</label>
+              <input [hidden]="true" (change)="onFileSelect($event, 0)" type="file" accept="all/*" #fileSelect />
+              <input
+                class="form__input image_input"
+                readonly
+                placeholder="Choose profile Image..."
+                name="profile_name"
+                [(ngModel)]="profile_name"
+              />
+              <button
+                matSuffix
+                mat-icon-button
+                class="upload_btn"
+                (click)="fileSelect.click()"
+                matTooltip="Select a Image file"
+              >
+                <mat-icon style="float: right; margin-top: -4vw; margin-right: -21vw">cloud_upload</mat-icon>
+              </button>
+            </div>
+            <div class="form_row">
+              <label>Shop Image</label>
+              <input [hidden]="true" (change)="onFileSelect($event, 1)" type="file" accept="all/*" #fileSelect1 />
+              <input
+                class="form__input image_input"
+                readonly
+                placeholder="Choose profile Image..."
+                name="store_image"
+                [(ngModel)]="store_image"
+              />
+              <button
+                matSuffix
+                mat-icon-button
+                class="upload_btn"
+                (click)="fileSelect1.click()"
+                matTooltip="Select a Image file"
+              >
+                <mat-icon style="float: right; margin-top: -4vw; margin-right: -21vw">cloud_upload</mat-icon>
+              </button>
+            </div>
+            <!-- <div class="profile_container">	
+              <img *ngIf="!storeimg" src="../../assets/dashboard/profile-image.png" class="profile_image"	
+                alt="profile_image" />	
+              <img *ngIf="storeimg" src="{{ imagestore }}" class="profile_image" alt="profile_image" />
+            </div> -->
+
+            <button class="submit_btn" (click)="profile_Update()">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="info_box">
+        <div class="notification">
+          <div class="noti_head">
+            <h5>Store Image</h5>
+            <div>
+              <img *ngIf="store_image != null && store_image" src="{{ store_image }}" class="store_image" />
+              <img
+                *ngIf="store_image == null || !store_image"
+                src="../../assets/dashboard/noimg.png"
+                class="store_image"
+              />
+            </div>
+          </div>
+          <!-- <div class="noti_cont" *ngFor="let notify of GetNotification">
+            <ul class="p-0">
+              <li class="sucess">
+                <p>Order no {{ notify.order_id }} {{ notify.desc }}</p>
+              </li>
+            </ul>
+          </div> -->
+        </div>
+      </div>
+      <div class="info_box">
+        <!-- <div class="noti_head">
+          <img src="../../assets/profile/gear.png" alt="setting" />
+          <h5>Settings</h5>
+        </div> -->
+        <div class="noti_cont">
+          <!-- <div class="email_noti">
+            <p>Email Notification</p>
+            <mat-slide-toggle></mat-slide-toggle>
+          </div> -->
+          <a class="logout" (click)="logout()">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

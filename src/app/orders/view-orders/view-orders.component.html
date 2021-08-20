@@ -1,0 +1,183 @@
+<div
+  class="header accent"
+  style="display: flex; place-content: center space-between; align-items: center; margin-top: 2vw"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxLayout.gt-xs="row"
+  fxLayoutAlign.gt-xs="space-between center"
+>
+  <!-- APP TITLE -->
+  <div class="logo mb-24 mb-sm-0" style="display: flex" fxLayout="row" fxLayoutAlign="start center">
+    <mat-icon class="logo-icons s-32" style="cursor: pointer" (click)="back()"> keyboard_backspace </mat-icon>
+    <span class="logo-text h3" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">Order Details </span>
+  </div>
+</div>
+<div class="container p-0">
+  <div class="row no-gutters table_cls">
+    <div class="col-md-12">
+      <div class="product_table">
+        <table mat-table matSort [dataSource]="OrderTable" class="mat-elevation-z8">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>S.No</th>
+            <td mat-cell *matCellDef="let element">{{ element.sno }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="order_no">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Order NO</th>
+            <td mat-cell *matCellDef="let element">{{ element.order_id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="item_name">
+            <th mat-header-cell *matHeaderCellDef style="padding-right: 1vw">Item Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.item_name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="item_desc">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Item Description</th>
+            <td mat-cell *matCellDef="let element">{{ element.item_description }}</td>
+          </ng-container>
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+            <td mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+          </ng-container>
+          <ng-container matColumnDef="Order_reason">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Reason</th>
+            <td mat-cell *matCellDef="let element">{{ element.reson }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Item_image">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Item Image</th>
+
+            <td mat-cell *matCellDef="let element">
+              <img style="padding: 4px; width: 59px; text-align: center" [src]="element.item_image" />
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="unit_price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Price $</th>
+            <td mat-cell *matCellDef="let element">{{ element.unit_price }}</td>
+          </ng-container>
+          <ng-container matColumnDef="total_amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount $</th>
+            <td mat-cell *matCellDef="let element">{{ element.total_amount }}</td>
+          </ng-container>
+          <ng-container matColumnDef="order_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Date</th>
+            <td mat-cell *matCellDef="let element">{{ element.order_date | date: 'MM-dd-yyyy' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="order_status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Status</th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                type="button"
+                class="btn btn-success orderstatus_btn status_btn"
+                data-dismiss="modal"
+                *ngIf="element.order_status == 'new'"
+                >{{ element.order_status | uppercase }}</span
+              >
+              <span
+                type="button"
+                class="btn btn-danger orderstatus_btn status_btn"
+                data-dismiss="modal"
+                *ngIf="element.order_status == 'rejected'"
+                >{{ element.order_status | uppercase }}</span
+              >
+              <span
+                type="button"
+                class="btn btn-success orderstatus_btn status_btn"
+                data-dismiss="modal"
+                *ngIf="element.order_status == 'accepted'"
+                >{{ element.order_status | uppercase }}</span
+              >
+              <span
+                type="button"
+                class="btn btn-secondary orderstatus_btn status_btn"
+                data-dismiss="modal"
+                *ngIf="element.order_status == 'processing'"
+                >{{ element.order_status | uppercase }}</span
+              >
+              <span
+                type="button"
+                class="btn btn-warning orderstatus_btn status_btn"
+                data-dismiss="modal"
+                *ngIf="element.order_status == 'ready for pickup'"
+                >{{ element.order_status | uppercase }}</span
+              >
+              <span
+                type="button"
+                class="btn btn-primary orderstatus_btn status_btn"
+                data-dismiss="modal"
+                *ngIf="element.order_status == 'completed'"
+                >{{ element.order_status | uppercase }}</span
+              >
+              <span
+                type="button"
+                class="btn incomplete_button"
+                data-dismiss="modal"
+                *ngIf="element.order_status == 'incomplete'"
+                >{{ element.order_status | uppercase }}</span
+              >
+              <span
+                type="button"
+                class="btn refund_button"
+                data-dismiss="modal"
+                *ngIf="element.order_status == 'refund issued'"
+                >{{ element.order_status | uppercase }}</span
+              >
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator #paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="logo mb-24 mb-sm-0" style="display: flex; margin-top: 3vw" fxLayout="row" fxLayoutAlign="start center">
+  <span class="logo-texts h3" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }"
+    >Customer Details
+  </span>
+</div>
+<div class="container p-0">
+  <div class="row no-gutters table_cls">
+    <div class="col-md-12">
+      <div class="product_table">
+        <table mat-table matSort [dataSource]="CustomerTable" class="mat-elevation-z8">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>S.No</th>
+            <td mat-cell *matCellDef="let element">{{ element.sno }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="First_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.first_name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="phone_no">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number</th>
+            <td mat-cell *matCellDef="let element">{{ element.phone_no }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="email_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email Id</th>
+            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+          </ng-container>
+          <!-- 
+    <ng-container matColumnDef="Gender">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Gender</th>
+      <td mat-cell *matCellDef="let element">{{ element.gender }}</td>
+    </ng-container> -->
+          <ng-container matColumnDef="Location">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+            <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns_cust"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns_cust"></tr>
+        </table>
+        <mat-paginator #paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

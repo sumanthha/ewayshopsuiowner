@@ -1,0 +1,284 @@
+<div
+  class="header accent"
+  style="display: flex; place-content: center space-between; align-items: center; margin-top: 2vw"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxLayout.gt-xs="row"
+  fxLayoutAlign.gt-xs="space-between center"
+>
+  <!-- APP TITLE -->
+  <div class="logo mb-24 mb-sm-0" style="display: flex" fxLayout="row" fxLayoutAlign="start center">
+    <span class="logo-text h3" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">Manage Orders </span>
+  </div>
+</div>
+<div class="container p-0">
+  <div class="row no-gutters">
+    <div class="col-md-12">
+      <div class="product_table">
+        <table mat-table matSort [dataSource]="BranchTable" class="mat-elevation-z8">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>S.No</th>
+            <td mat-cell *matCellDef="let element">{{ element.sno }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="order_no">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Order No</th>
+            <td mat-cell *matCellDef="let element">{{ element.order_id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ordered_on">
+            <th mat-header-cell *matHeaderCellDef>Ordered Date</th>
+            <td mat-cell *matCellDef="let element">{{ element.order_date | date: 'MM-dd-yyyy' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="customer_no">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.customer }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount $</th>
+            <td mat-cell *matCellDef="let element">{{ element.Amount }}</td>
+          </ng-container>
+          <ng-container matColumnDef="order_status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Status</th>
+            <td mat-cell *matCellDef="let element" style="text-align: center">
+              <img
+                src="../../assets/orders/Ready for Pickup.png"
+                matTooltip="Ready for pickup"
+                *ngIf="element.order_status == 'ready for pickup'"
+              />
+              <img src="../../assets/orders/New.png" matTooltip="New" *ngIf="element.order_status == 'new'" />
+              <img
+                src="../../assets/orders/Rejected.png"
+                matTooltip="Rejected"
+                *ngIf="element.order_status == 'rejected'"
+              />
+              <img
+                src="../../assets/orders/Accepted.png"
+                matTooltip="Accepted"
+                *ngIf="element.order_status == 'accepted'"
+              />
+              <img
+                src="../../assets/orders/Processing.png"
+                matTooltip="Processing"
+                *ngIf="element.order_status == 'processing'"
+              />
+              <img
+                src="../../assets/orders/Completed.png"
+                matTooltip="Completed"
+                *ngIf="element.order_status == 'completed'"
+              />
+              <img
+                src="../../assets/orders/Incomplete.png"
+                matTooltip="Incompleted"
+                *ngIf="element.order_status == 'incomplete'"
+              />
+              <img
+                src="../../assets/orders/Refund Issued.png"
+                matTooltip="Refund issues"
+                *ngIf="element.order_status == 'refund issued'"
+              />
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="prefer_pickup_time">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Prefer pickup time <br />Date - Time</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.prefer_from_date | date: 'MM-dd-yyyy' }} <br />{{ element.prefer_start_time }} -
+              {{ element.prefer_end_time }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="est_pickup_time">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Est pickup time <br />Date - Time</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.est_pickup_time | date: 'MM-dd-yyyy' }} <br />
+              {{ element.est_starttime }} - {{ element.est_endtime }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="action_btn">
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-icon
+                  matTooltip="View Order"
+                  class="action-icons"
+                  style="cursor: pointer"
+                  [routerLink]="['/orders/view-orders', element.order_id]"
+                  >visibility</mat-icon
+                >
+
+                <button mat-icon-button *ngIf="element.order_status == 'ready for pickup'">
+                  <mat-icon
+                    matTooltip="Time Management"
+                    class="action-icons"
+                    style="cursor: pointer"
+                    (click)="modalOpen_Cal(element.order_id, element.customer, element.order_status)"
+                    >insert_invitation</mat-icon
+                  >
+                </button>
+                <button mat-icon-button [disabled]="true" *ngIf="element.order_status != 'ready for pickup'">
+                  <mat-icon
+                    matTooltip="Time Management"
+                    class="action-icons"
+                    style="cursor: pointer"
+                    (click)="modalOpen_Cal(element.order_id, element.customer, element.order_status)"
+                    >insert_invitation</mat-icon
+                  >
+                </button>
+                <mat-icon
+                  matTooltip="Order Status"
+                  style="cursor: pointer; font-weight: 700"
+                  (click)="modalOpen(element.order_id)"
+                  class="action-icons"
+                  style="cursor: pointer"
+                  >format_align_left</mat-icon
+                >
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator #paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="backdrop" [ngStyle]="{ display: display }"></div>
+<div
+  class="modal"
+  [ngStyle]="{ display: display }"
+  id="menu-addon"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="menuaddon"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content addon-wraapper">
+      <div class="modal-header" style="display: block !important">
+        <h4 class="modal-title head">Update Order Status</h4>
+        <br />
+        <div class="order_data">
+          <p class="order_cls">{{ order_id }}</p>
+          <p>{{ customer_name }}</p>
+        </div>
+        <button type="button" class="close" (click)="modalClose()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <button type="button" class="save_btn" data-dismiss="modal" (click)="order_status(order_id, 'new')">New</button>
+        <button
+          type="button"
+          class="btn btn-danger button"
+          data-dismiss="modal"
+          (click)="order_status(order_id, 'rejected')"
+        >
+          Rejected
+        </button>
+        <button
+          type="button"
+          class="btn btn-success button"
+          data-dismiss="modal"
+          (click)="order_status(order_id, 'accepted')"
+        >
+          Accepted
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary button"
+          data-dismiss="modal"
+          (click)="order_status(order_id, 'processing')"
+        >
+          Processing
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning button"
+          data-dismiss="modal"
+          (click)="order_status(order_id, 'ready for pickup')"
+        >
+          Ready for pickup
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary button"
+          data-dismiss="modal"
+          (click)="order_status(order_id, 'completed')"
+        >
+          Completed
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="backdrop" [ngStyle]="{ display: display2 }"></div>
+<div
+  class="modal"
+  [ngStyle]="{ display: display2 }"
+  id="menu-addon"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="menuaddon"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content addon-wraapper">
+      <div class="modal-header" style="display: block !important">
+        <h5 class="modal-title time_head">Estimated Pickup Time</h5>
+        <span style="margin-left: 7vw; font-weight: 500">ID_C0010145</span>
+        <button type="button" class="close" (click)="modalClose()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input_datepicker">
+          <mat-form-field style="width: 113%">
+            <mat-label>Choose Date</mat-label>
+            <input matInput [matDatepicker]="picker" [min]="minDate" (dateChange)="EndDateChange($event)" />
+            <mat-datepicker-toggle matSuffix [for]="picker" class="datepicker_toggle"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <p style="color: red" [hidden]="validEsttime">Choose Est Date</p>
+        </div>
+        <div>
+          <input
+            [ngxTimepicker]="pickers"
+            [(ngModel)]="start_time"
+            name="start_time1"
+            class="form-control"
+            placeholder="From time"
+            style="border-color: currentColor"
+          />
+          <ngx-material-timepicker-toggle
+            matSuffix
+            [for]="pickers"
+            class="time_toggle"
+          ></ngx-material-timepicker-toggle>
+          <ngx-material-timepicker class="time_picker" #pickers></ngx-material-timepicker>
+          <p style="color: red" [hidden]="valid_starttime">Select Est Start time</p>
+        </div>
+        <div style="margin-top: 1vw">
+          <input
+            [ngxTimepicker]="end_pickers"
+            [(ngModel)]="end_time"
+            name="start_time1"
+            class="form-control"
+            placeholder="To time"
+            style="border-color: currentColor"
+          />
+          <ngx-material-timepicker-toggle [for]="end_pickers" class="time_toggle"></ngx-material-timepicker-toggle>
+          <ngx-material-timepicker class="time_picker" #end_pickers></ngx-material-timepicker>
+          <p style="color: red" [hidden]="valid_endtime">Select Est End time</p>
+        </div>
+        <div style="margin: 2vw">
+          <button type="button" class="btn btn-primary time_save_btn" data-dismiss="modal" (click)="update_Est_Time()">
+            Save
+          </button>
+          <button type="button" class="time_cancel_btn" data-dismiss="modal" (click)="modalClose()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

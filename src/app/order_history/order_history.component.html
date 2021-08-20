@@ -1,0 +1,150 @@
+<div
+  class="header accent"
+  style="display: flex; place-content: center space-between; align-items: center; margin-top: 2vw"
+  fxLayout="column"
+  fxLayoutAlign="center center"
+  fxLayout.gt-xs="row"
+  fxLayoutAlign.gt-xs="space-between center"
+>
+  <!-- APP TITLE -->
+  <div class="logo mb-24 mb-sm-0" style="display: flex" fxLayout="row" fxLayoutAlign="start center">
+    <span class="logo-text h3" [@animate]="{ value: '*', params: { delay: '100ms', x: '-25px' } }">Order History </span>
+  </div>
+  <!-- / APP TITLE -->
+  <!-- SEARCH -->
+  <div style="padding-left: 44%; padding-top: 0%; cursor: pointer">
+    <!-- <button (click)="generateExcel()" class="btn btn-secondary mb-2"> </button> -->
+    <img src="../../assets/orders/export_data.png" (click)="generateExcel()" />
+  </div>
+  <div class="search-wrapper ml-sm-32">
+    <div
+      class="search"
+      fxFlex
+      fxLayout="row"
+      fxLayoutAlign="start center"
+      style="
+        flex-direction: row;
+        box-sizing: border-box;
+        display: flex;
+        place-content: center flex-start;
+        align-items: center;
+        flex: 1 1 0%;
+      "
+    >
+      <!-- <mat-label style="margin-top: 1px;">--Status--</mat-label> -->
+      <mat-select [(ngModel)]="selectedBranch" [(value)]="selected" (selectionChange)="onStatusChange($event)">
+        <mat-option *ngFor="let order of Orderhistory_list" [value]="order.id">
+          {{ order.name }}
+        </mat-option>
+      </mat-select>
+    </div>
+  </div>
+</div>
+<div class="container p-0">
+  <div class="row no-gutters">
+    <div class="col-md-12">
+      <div class="product_table">
+        <table mat-table matSort [dataSource]="BranchTable" class="mat-elevation-z8">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>S.No</th>
+            <td mat-cell *matCellDef="let element">{{ element.sno }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="order_no">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Order No</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [routerLink]="['/orders/view-orders', element.order_no]"
+              style="cursor: pointer; font-weight: 700; text-decoration: underline !important"
+            >
+              {{ element.order_no }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="order_date">
+            <th mat-header-cell *matHeaderCellDef>Order Date</th>
+            <td mat-cell *matCellDef="let element">{{ element.order_date | date: 'MM-dd-yyyy' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="customer">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.customer }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone_no">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone No</th>
+            <td mat-cell *matCellDef="let element">{{ element.phone_no }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="email_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email ID</th>
+            <td mat-cell *matCellDef="let element">{{ element.email_id }}</td>
+          </ng-container>
+          <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
+            <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+          </ng-container>
+          <ng-container matColumnDef="order_status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Status</th>
+            <td mat-cell *matCellDef="let element">
+              <img
+                src="../../assets/orders/Ready for Pickup.png"
+                matTooltip="Ready for pickup"
+                *ngIf="element.order_status == 'ready for pickup'"
+              />
+              <img src="../../assets/orders/New.png" matTooltip="New" *ngIf="element.order_status == 'new'" />
+              <img
+                src="../../assets/orders/Rejected.png"
+                matTooltip="Rejected"
+                *ngIf="element.order_status == 'rejected'"
+              />
+              <img
+                src="../../assets/orders/Accepted.png"
+                matTooltip="Accepted"
+                *ngIf="element.order_status == 'accepted'"
+              />
+              <img
+                src="../../assets/orders/Processing.png"
+                matTooltip="Processing"
+                *ngIf="element.order_status == 'processing'"
+              />
+              <img
+                src="../../assets/orders/Completed.png"
+                matTooltip="Completed"
+                *ngIf="element.order_status == 'completed'"
+              />
+              <img
+                src="../../assets/orders/Incomplete.png"
+                matTooltip="Incompleted"
+                *ngIf="element.order_status == 'incomplete'"
+              />
+              <img
+                src="../../assets/orders/Refund Issued.png"
+                matTooltip="Refund issues"
+                *ngIf="element.order_status == 'refund issued'"
+              />
+
+              <img
+                src="../../assets/orders/pending.png"
+                matTooltip="Refund issues"
+                *ngIf="element.order_status == 'pending'"
+              />
+
+              <!-- <span type="button" class="btn btn-success button" data-dismiss="modal" *ngIf="element.order_status=='new'">{{ element.order_status | uppercase }}</span>
+        <span type="button" class="btn btn-danger button" data-dismiss="modal" *ngIf="element.order_status=='rejected'">{{ element.order_status | uppercase }}</span>
+        <span type="button" class="btn btn-success button" data-dismiss="modal" *ngIf="element.order_status=='accepted'">{{ element.order_status | uppercase }}</span>
+        <span type="button" class="btn btn-secondary button" data-dismiss="modal" *ngIf="element.order_status=='processing'">{{ element.order_status | uppercase }}</span>
+        <span type="button" class="btn btn-warning button" style="color: white !important;" data-dismiss="modal" *ngIf="element.order_status=='ready for pickup'">{{ element.order_status | uppercase }}</span>
+        <span type="button" class="btn btn-primary button" data-dismiss="modal" *ngIf="element.order_status=='completed'">{{ element.order_status  | uppercase}}</span>
+        <span type="button" class="btn incomplete_button" data-dismiss="modal" *ngIf="element.order_status=='incomplete'">{{ element.order_status  | uppercase}}</span>
+        <span type="button" class="btn refund_button" data-dismiss="modal" *ngIf="element.order_status=='refund issued'">{{ element.order_status  | uppercase}}</span> -->
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator #paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

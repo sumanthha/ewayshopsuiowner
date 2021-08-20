@@ -1,0 +1,159 @@
+<div class="container-fluid p-0">
+  <div class="row no-gutters">
+    <div class="col-md-7">
+      <div class="left__login_content">
+        <img src="../../assets/login/white_logo.png" alt="" />
+        <div class="login__left__content">
+          <h5>We Are ewayshops</h5>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+          <span class="copyright"> @ ewayshop 2021, All Rights Reserved. </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="right_container" style="height: 100vh; position: relative; background-color: #ffffff">
+        <div class="right_content">
+          <img src="../../assets/login/logo.png" class="color_logo w-100" alt="eWayShop-logo" />
+          <!-- FORGOT PASSOWRD FORM START-->
+          <div class="login_form" *ngIf="show_forget_form">
+            <h3>Forgot Password</h3>
+            <p>Please enter your email address. You will receive a link to create a new password via email.</p>
+            <div class="form_errors">
+              <span *ngIf="isLoading && f.email.errors?.email" class="error">Please enter valid Email</span>
+              <span *ngIf="isLoading && f.email.errors?.required == true" class="error">Email field is required</span>
+              <span *ngIf="link_send_message" class="error text-success"
+                >Reset link has been send to your email please check.</span
+              >
+            </div>
+
+            <form class="login-form" [formGroup]="forgotForm">
+              <mat-form-field class="login-full-width">
+                <mat-label>Email</mat-label>
+                <input matInput value="" formControlName="email" />
+              </mat-form-field>
+
+              <div class="login_btn_container">
+                <button type="button" class="login_btn">Submit</button>
+              </div>
+              <div class="login_btn_container">
+                <button type="button" class="login_btn">Cancel</button>
+              </div>
+            </form>
+          </div>
+          <!-- FORGOT PASSOWRD FORM END-->
+          <!-- RESET PASSOWRD FORM START-->
+          <div class="login_form" *ngIf="show_reset_form">
+            <h3>Reset Password</h3>
+            <p>Enter your new password for your admin account</p>
+            <div class="form_errors">
+              <span
+                *ngIf="(submitted && r.password.errors?.required) || (submitted && r.confirm_password.errors?.required)"
+                class="error"
+                >Password or Confirm Password can not be empty</span
+              >
+              <span *ngIf="submitted && r.confirm_password.errors?.passwordsNotMatching == true" class="error"
+                >Please make sure your passwords match.</span
+              >
+            </div>
+            <form class="login-form" [formGroup]="resetForm" (ngSubmit)="reset()">
+              <mat-form-field class="login-full-width">
+                <mat-label>New Password</mat-label>
+                <input
+                  matInput
+                  [type]="show_button ? 'text' : 'password'"
+                  formControlName="password"
+                  [ngClass]="{ 'is-invalid': submitted && r.password.errors }"
+                  matInput
+                  showHideInput
+                />
+                <div
+                  class="show_password"
+                  (click)="showPass()"
+                  style="float: right; margin-top: -14px; cursor: pointer"
+                >
+                  <mat-icon [ngClass]="show ? 'visibility' : 'visibility_off'" matSuffix class="secondary-text">
+                  </mat-icon>
+                </div>
+              </mat-form-field>
+              <mat-form-field class="login-full-width password_field">
+                <mat-label>Confirm Password</mat-label>
+
+                <input
+                  matInput
+                  [type]="show_button1 ? 'text' : 'password'"
+                  formControlName="confirm_password"
+                  [ngClass]="{ 'is-invalid': submitted && r.confirm_password.errors }"
+                  matInput
+                  showHideInput
+                />
+                <div
+                  class="show_password"
+                  (click)="showConfpass()"
+                  style="float: right; margin-top: -14px; cursor: pointer"
+                >
+                  <mat-icon [ngClass]="showConfirm ? 'visibility' : 'visibility_off'" matSuffix class="secondary-text">
+                  </mat-icon>
+                </div>
+              </mat-form-field>
+              <div class="login_btn_container">
+                <button type="button" (click)="reset()" class="login_btn">Reset Password</button>
+              </div>
+            </form>
+          </div>
+          <!-- RESET PASSOWRD FORM END-->
+
+          <!-- RESET PASSOWRD FORM START-->
+          <div class="login_form" *ngIf="show_password_form">
+            <h3>Set Password</h3>
+            <p>Enter your new password for your admin account</p>
+            <div class="form_errors">
+              <span *ngIf="isLoading && r.email.errors?.email" class="error">Please enter valid Email</span>
+              <span *ngIf="isLoading && r.email.errors?.required == true" class="error">Email is required</span>
+              <span
+                *ngIf="(isLoading && r.password.errors?.required) || (isLoading && r.confirm_password.errors?.required)"
+                class="error"
+                >Password or Confirm Password can not be empty</span
+              >
+              <span *ngIf="isLoading && r.confirm_password.errors?.passwordsNotMatching == true" class="error"
+                >Please make sure your passwords match.</span
+              >
+            </div>
+            <form class="login-form" [formGroup]="resetForm">
+              <mat-form-field class="login-full-width">
+                <mat-label>Email</mat-label>
+                <input matInput value="" formControlName="email" />
+              </mat-form-field>
+              <mat-form-field class="login-full-width">
+                <mat-label>New Password</mat-label>
+                <input matInput value="" formControlName="password" />
+              </mat-form-field>
+              <mat-form-field class="login-full-width">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput value="" formControlName="confirm_password" />
+              </mat-form-field>
+              <div class="login_btn_container">
+                <button type="button" (click)="reset()" class="login_btn">Reset Password</button>
+              </div>
+            </form>
+          </div>
+          <!-- RESET PASSOWRD FORM END-->
+
+          <!-- RESET SUCCESS MESSAGE-->
+          <div class="login_form forget_success" *ngIf="reset_success">
+            <div class="sucess_msg d-flex align-items-start justify-content-between">
+              <img src="../../../assets/login/check.png" alt="check-icon" />
+              <div>
+                <h3>Password Changed Successfully!</h3>
+                <p>Your password has been changed successfully.</p>
+                <div class="login_btn_container">
+                  <button type="button" class="login_btn">Login</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- RESET SUCCESS MESSAGE-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

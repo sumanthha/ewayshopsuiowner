@@ -1,0 +1,57 @@
+<div class="container-fluid p-0">
+  <div class="row no-gutters">
+    <div class="col-md-7">
+      <div class="left__login_content">
+        <img src="../../assets/login/white_logo.png" alt="" />
+        <div class="login__left__content">
+          <h5>We Are ewayshops</h5>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+          <span class="copyright"> @ ewayshop 2021, All Rights Reserved. </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="right_container" style="height: 100vh; position: relative; background-color: #ffffff">
+        <div class="right_content">
+          <img src="../../assets/login/logo.png" class="color_logo w-100" alt="eWayShop-logo" />
+          <!-- FORGOT PASSOWRD FORM START-->
+          <div class="login_form">
+            <h3>Forgot Password</h3>
+            <p>Please enter your email address. You will receive a link to create a new password via email.</p>
+            <div class="form_errors">
+              <span *ngIf="isLoading && f.email.errors?.email" class="error">Please enter valid Email</span>
+              <span *ngIf="isLoading && f.email.errors?.required == true" class="error">Email field is required</span>
+              <span *ngIf="link_send_message" class="error text-success"
+                >Reset link has been send to your email please check.</span
+              >
+            </div>
+
+            <form class="login-form" [formGroup]="forgotForm">
+              <mat-form-field class="login-full-width">
+                <mat-label>Email</mat-label>
+                <input matInput value="" formControlName="email" />
+              </mat-form-field>
+
+              <div class="login_btn_container">
+                <button type="button" (click)="forgotPassword()" class="login_btn">Submit</button>
+                <button type="button" (click)="cancel()" class="cancel_btn">Cancel</button>
+              </div>
+            </form>
+          </div>
+          <!-- FORGOT PASSOWRD FORM END-->
+          <!-- RESET PASSOWRD FORM START-->
+
+          <!-- RESET PASSOWRD FORM END-->
+
+          <!-- RESET PASSOWRD FORM START-->
+
+          <!-- RESET PASSOWRD FORM END-->
+
+          <!-- RESET SUCCESS MESSAGE-->
+
+          <!-- RESET SUCCESS MESSAGE-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
