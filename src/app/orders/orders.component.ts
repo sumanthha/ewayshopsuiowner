@@ -49,6 +49,7 @@ export class OrdersComponent implements OnInit {
   end_time: any;
   order_id: any;
   Est_date: any;
+
   validEsttime: boolean = true;
   valid_starttime: boolean = true;
   valid_endtime: boolean = true;
