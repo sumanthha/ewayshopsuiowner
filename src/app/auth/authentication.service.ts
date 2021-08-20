@@ -22,17 +22,17 @@ export interface LoginContext {
   providedIn: 'root',
 })
 export class AuthenticationService {
-  constructor(private credentialsService: CredentialsService,private httpClient: HttpClient,private router:Router) {}
+  constructor(private credentialsService: CredentialsService, private httpClient: HttpClient, private router: Router) {}
   api_url = `${ENV.serverUrl}`;
   /**
    * Authenticates the user.
    * @param context The login parameters.
    * @return The user credentials.
    */
-   public getToken(): any {
+  public getToken(): any {
     return localStorage.getItem('access');
   }
-   public refreshToken(): any {
+  public refreshToken(): any {
     localStorage.getItem('refresh');
   }
   public isAuthenticated(): boolean {
@@ -60,7 +60,7 @@ export class AuthenticationService {
    * Logs out the user and clear credentials.
    * @return True if the user was logged out successfully.
    */
-   logout() {
+  logout() {
     localStorage.clear();
     this.router.navigateByUrl('/login');
   }
@@ -84,15 +84,15 @@ export class AuthenticationService {
   }
   GetMyOrders(data: any) {
     let url = this.api_url + '/GetUserAllMy_Orders';
-    return this.httpClient.post<Response[]>(`${url}`,data);
+    return this.httpClient.post<Response[]>(`${url}`, data);
   }
   CancelOrders(data: any) {
     let url = this.api_url + '/CancelOrder';
-    return this.httpClient.post<Response[]>(`${url}`,data);
+    return this.httpClient.post<Response[]>(`${url}`, data);
   }
   discount(code: any, data: any) {
-    let url = this.api_url + 'store/discount_update/'+code;
-    return this.httpClient.put<Response[]>(`${url}`,data);
+    let url = this.api_url + 'store/discount_update/' + code;
+    return this.httpClient.put<Response[]>(`${url}`, data);
   }
 
   GetNotification() {
@@ -112,11 +112,11 @@ export class AuthenticationService {
     return this.httpClient.get<Response[]>(`${url}`);
   }
   GetOrderHistory(status: any) {
-    let url = this.api_url + 'store/order_status_history?status='+ status;
+    let url = this.api_url + 'store/order_status_history?status=' + status;
     return this.httpClient.get<Response[]>(`${url}`);
   }
   GetSingleOrder(id: any) {
-    let url = this.api_url + 'store/order/'+ id;
+    let url = this.api_url + 'store/order/' + id;
     return this.httpClient.get<Response[]>(`${url}`);
   }
   GetOrders_count() {
@@ -132,31 +132,31 @@ export class AuthenticationService {
     return this.httpClient.get<Response[]>(`${url}`);
   }
   orderStatus_Update(id: any, status: any) {
-    let url = this.api_url + 'store/order_status_update/'+id;
-    return this.httpClient.put<Response[]>(`${url}`,status);
+    let url = this.api_url + 'store/order_status_update/' + id;
+    return this.httpClient.put<Response[]>(`${url}`, status);
   }
   time_Update(id: any, status: any) {
-    let url = this.api_url + 'store/update_timemanagement/'+id;
-    return this.httpClient.put<Response[]>(`${url}`,status);
+    let url = this.api_url + 'store/update_timemanagement/' + id;
+    return this.httpClient.put<Response[]>(`${url}`, status);
   }
   create_product(data: any) {
     let url = this.api_url + 'store/product';
-    return this.httpClient.post<Response[]>(`${url}`,data);
+    return this.httpClient.post<Response[]>(`${url}`, data);
   }
   getProduct() {
     let url = this.api_url + 'store/product';
     return this.httpClient.get<Response[]>(`${url}`);
   }
   getSingleProduct(id: any) {
-    let url = this.api_url + 'store/product/'+id;
+    let url = this.api_url + 'store/product/' + id;
     return this.httpClient.get<Response[]>(`${url}`);
   }
   update_product(id: any, data: any) {
-    let url = this.api_url + 'store/product/'+id;
-    return this.httpClient.put<Response[]>(`${url}`,data);
+    let url = this.api_url + 'store/product/' + id;
+    return this.httpClient.put<Response[]>(`${url}`, data);
   }
   deleteSingleProduct(id: any) {
-    let url = this.api_url + 'store/product/'+id;
+    let url = this.api_url + 'store/product/' + id;
     return this.httpClient.request('delete', url);
   }
   product_Bulkupload(event: any) {
@@ -170,7 +170,7 @@ export class AuthenticationService {
     return this.httpClient.get<Response[]>(`${url}`);
   }
   getSubCategory(value: any) {
-    let url = this.api_url + 'store/subcategory/'+value;
+    let url = this.api_url + 'store/subcategory/' + value;
     return this.httpClient.get<Response[]>(`${url}`);
   }
   GetProfile() {
@@ -183,7 +183,7 @@ export class AuthenticationService {
   }
   UpdateProfile(req: any) {
     let url = this.api_url + 'store/profile/update';
-    return this.httpClient.put<Response[]>(`${url}`,req);
+    return this.httpClient.put<Response[]>(`${url}`, req);
   }
   getOrders() {
     let url = this.api_url + 'store/order';

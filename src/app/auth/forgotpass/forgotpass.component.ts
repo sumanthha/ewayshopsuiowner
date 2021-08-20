@@ -4,7 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ForgetService } from './forgot-rest.service';
-import { AuthenticationService} from '../authentication.service'
+import { AuthenticationService } from '../authentication.service';
 @Component({
   selector: 'app-forgotpass',
   templateUrl: './forgotpass.component.html',
@@ -34,7 +34,7 @@ export class ForgotpassComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService:AuthenticationService
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit(): void {

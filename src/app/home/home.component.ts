@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NotificationService } from '../notifications/notifications.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import {AuthenticationService} from '../auth/authentication.service';
+import { AuthenticationService } from '../auth/authentication.service';
 export interface PeriodicElement {
   orderid: any;
   date: any;
@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit {
     private OrdersService: OrdersService,
     private Spinner: NgxSpinnerService,
     private NotificationService: NotificationService,
-    private authenticationService:AuthenticationService
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit() {

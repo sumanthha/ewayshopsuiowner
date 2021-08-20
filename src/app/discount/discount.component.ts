@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { DiscountService } from './discount.service';
-import {AuthenticationService} from '../auth/authentication.service';
+import { AuthenticationService } from '../auth/authentication.service';
 export interface ManageCustomerData {
   id: number;
   first_name: string;
@@ -39,7 +39,7 @@ export class DiscountComponent implements OnInit {
     private DiscountService: DiscountService,
     private snackBar: MatSnackBar,
     private Spinner: NgxSpinnerService,
-    private authenticationService:AuthenticationService
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit() {

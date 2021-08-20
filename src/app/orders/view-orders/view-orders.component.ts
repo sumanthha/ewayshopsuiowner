@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { OrdersService } from '../../orders/orders.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AuthenticationService} from '../../auth/authentication.service'
+import { AuthenticationService } from '../../auth/authentication.service';
 export interface ManageOrderData {
   id: number;
   first_name: string;
@@ -55,7 +55,7 @@ export class ViewOrdersComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private Spinner: NgxSpinnerService,
-    private authenticationService:AuthenticationService
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit() {

@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { OrderHistoryService } from './order_history.service';
-import {AuthenticationService} from '../auth/authentication.service';
+import { AuthenticationService } from '../auth/authentication.service';
 import * as fs from 'file-saver';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
@@ -91,7 +91,7 @@ export class OrderHistoryComponent implements OnInit {
     private OrderHistoryService: OrderHistoryService,
     private snackBar: MatSnackBar,
     private Spinner: NgxSpinnerService,
-    private authenticationService:AuthenticationService
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit() {

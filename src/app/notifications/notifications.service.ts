@@ -39,7 +39,7 @@ export class NotificationService {
   //       delete_id: data,
   //     },
   //   };
-   
+
   //   return this.httpClient.delete('store/notification_delete/', options).pipe(
   //     map((body: any) => {
   //       if (body) {

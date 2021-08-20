@@ -5,7 +5,7 @@ import { environment } from '@env/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ForgetPasswordService } from './forget-rest.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import {AuthenticationService} from'../authentication.service';
+import { AuthenticationService } from '../authentication.service';
 @Component({
   selector: 'app-forget-reset',
   templateUrl: './forget-reset.component.html',
@@ -41,7 +41,7 @@ export class ForgetResetComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService:AuthenticationService
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit(): void {

@@ -10,7 +10,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ReturnStatement } from '@angular/compiler';
-import {AuthenticationService} from '../auth/authentication.service'
+import { AuthenticationService } from '../auth/authentication.service';
 export interface ManageCustomerData {
   id: number;
   first_name: string;
@@ -55,7 +55,11 @@ export class OrdersComponent implements OnInit {
   customer_name: any;
   TimeCalander: boolean = false;
   minDate = new Date();
-  constructor(private OrdersService: OrdersService, private Spinner: NgxSpinnerService,private authenticationService:AuthenticationService) {}
+  constructor(
+    private OrdersService: OrdersService,
+    private Spinner: NgxSpinnerService,
+    private authenticationService: AuthenticationService
+  ) {}
 
   ngOnInit() {
     this.Spinner.show();

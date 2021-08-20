@@ -8,7 +8,7 @@ import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatTableDataSource } from '@angular/material/table';
 import { NotificationService } from './notifications.service';
 import Swal from 'sweetalert2';
-import { AuthenticationService} from '../auth/authentication.service'
+import { AuthenticationService } from '../auth/authentication.service';
 export interface ManageCustomerData {
   id: number;
   first_name: string;
@@ -42,7 +42,7 @@ export class NotificationComponent implements OnInit {
     private NotificationService: NotificationService,
     private snackBar: MatSnackBar,
     private Spinner: NgxSpinnerService,
-    private authenticationService:AuthenticationService
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit() {
