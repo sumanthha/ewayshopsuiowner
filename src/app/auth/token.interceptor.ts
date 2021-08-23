@@ -12,13 +12,18 @@ import { tap } from 'rxjs/operators';
 //import { LoginService } from 'app/main/page/login/login.service';
 import { BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpInterceptorBaseAuthService implements HttpInterceptor {
   tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-  constructor(private basicAuthenticationService: AuthenticationService, private router: Router) {}
+  constructor(
+    private basicAuthenticationService: AuthenticationService,
+    private router: Router,
+    private Spinner: NgxSpinnerService
+  ) {}
   intercept(request: HttpRequest<any>, next: HttpHandler) {
     let basicAuthHeaderString = this.basicAuthenticationService.getToken();
     let username = this.basicAuthenticationService.isAuthenticated();
@@ -43,22 +48,26 @@ export class HttpInterceptorBaseAuthService implements HttpInterceptor {
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
               this.tokenSubject.next(null);
-              return this.basicAuthenticationService.refreshToken().subscribe(
-                (result: any) => {
-                  let accessToken = result['access'];
-                  if (accessToken) {
-                    this.tokenSubject.next(accessToken);
-                    localStorage.setItem('access', accessToken);
-                    newReq.headers.set('Authorization', 'Bearer ' + accessToken);
-                    return next.handle(newReq);
-                  }
-                },
-                (error: any) => {
-                  localStorage.clear();
-                  //   this.router.navigate(['/auth/login'])
-                }
-              );
-
+              this.Spinner.hide();
+              this.basicAuthenticationService.logout();
+              //  return this.basicAuthenticationService.logout();
+              //  this.router.navigate(['/login'])
+              //this.tokenSubject.next(null);
+              // return this.basicAuthenticationService.refreshToken().subscribe(
+              //   (result: any) => {
+              //     let accessToken = result['access'];
+              //     if (accessToken) {
+              //       this.tokenSubject.next(accessToken);
+              //       localStorage.setItem('access', accessToken);
+              //       newReq.headers.set('Authorization', 'Bearer ' + accessToken);
+              //       return next.handle(newReq);
+              //     }
+              //   },
+              //   (error: any) => {
+              //     localStorage.clear();
+              //     //   this.router.navigate(['/auth/login'])
+              //   }
+              // );
               // redirect to the login route
               // or show a modal
             }

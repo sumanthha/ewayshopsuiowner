@@ -21,7 +21,14 @@
         <button class="sample_btn" (click)="downloadFile()">
           <img src="../../assets/product/download.png" alt="" /> Sample CSV
         </button>
-        <input [hidden]="true" (change)="onFileSelect($event)" type="file" accept="all/*" #fileSelect />
+        <input
+          [hidden]="true"
+          [value]="selected_file"
+          (change)="onFileSelect($event)"
+          type="file"
+          accept="all/*"
+          #fileSelect
+        />
         <button matSuffix mat-icon-button class="upload_btn" (click)="fileSelect.click()" matTooltip="Bulk upload">
           Upload
         </button>
@@ -108,7 +115,7 @@
                   <span class="edit_prod">Edit Product</span>
                   <div class="form_row" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                     <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
-                      <mat-label>Product Code *</mat-label>
+                      <mat-label>Product Code </mat-label>
                       <input
                         matInput
                         formControlName="product_code"
@@ -122,7 +129,7 @@
                       </div>
                     </mat-form-field>
                     <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
-                      <mat-label>Product Name *</mat-label>
+                      <mat-label>Product Name </mat-label>
                       <input
                         matInput
                         formControlName="product_name"
@@ -140,7 +147,7 @@
                       <mat-label>Category *</mat-label>
                       <mat-select
                         [(ngModel)]="selectedCategory"
-                        (ngModelChange)="onOptionsSelected($event)"
+                        (ngModelChange)="editSubcategorySelection($event)"
                         formControlName="category"
                         [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
                       >
@@ -215,7 +222,7 @@
 
                   <div class="form_row" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                     <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
-                      <mat-label>Tax *</mat-label>
+                      <mat-label>Tax </mat-label>
                       <input
                         matInput
                         formControlName="tax"
@@ -228,7 +235,7 @@
                       </div>
                     </mat-form-field>
                     <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
-                      <mat-label>SKU *</mat-label>
+                      <mat-label>SKU </mat-label>
                       <input
                         matInput
                         formControlName="sku"
@@ -243,7 +250,7 @@
                   </div>
                   <div class="form_row" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                     <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
-                      <mat-label>Description *</mat-label>
+                      <mat-label>Description </mat-label>
                       <input
                         matInput
                         formControlName="description"
@@ -256,7 +263,7 @@
                       </div>
                     </mat-form-field>
                     <mat-form-field appearance="outline" appearance="outline" fxFlex="50" class="pr-4">
-                      <mat-label>Count *</mat-label>
+                      <mat-label>Count </mat-label>
                       <input
                         matInput
                         formControlName="count"
@@ -344,20 +351,33 @@
         <h6 class="r_form_title">Upload store inventory</h6>
         <div class="form_errors">
           <span *ngIf="submitted && f.product_id.errors?.required" class="error">Product ID field is required</span>
+          <div *ngIf="submitted && f.product_id.errors?.cannotContainSpace" class="error">
+            Product id can not contain space.
+          </div>
           <span *ngIf="submitted && f.product_name.errors?.required" class="error">Product name field is required</span>
+          <div *ngIf="submitted && f.product_name.errors?.cannotContainSpace" class="error">
+            Product name can not contain space.
+          </div>
           <span *ngIf="submitted && f.category.errors?.required" class="error">Category field is required</span>
           <span *ngIf="submitted && f.sub_category.errors?.required" class="error">Sub category field is required</span>
           <span *ngIf="submitted && f.sku.errors?.required" class="error">SKU field is required</span>
+          <div *ngIf="submitted && f.sku.errors?.cannotContainSpace" class="error">SKU can not contain space.</div>
           <span *ngIf="submitted && f.description.errors?.required" class="error">description field is required</span>
-          <span *ngIf="submitted && f.price.errors?.required" class="error">price field is required</span>
+          <div *ngIf="submitted && f.description.errors?.cannotContainSpace" class="error">
+            Description can not contain space.
+          </div>
+          <span *ngIf="submitted && f.price.errors?.required" class="error">Price field is required</span>
+          <div *ngIf="submitted && f.price.errors?.cannotContainSpace" class="error">Price can not contain space.</div>
           <span *ngIf="submitted && f.tax.errors?.required" class="error">tax field is required</span>
+          <div *ngIf="submitted && f.tax.errors?.cannotContainSpace" class="error">Tax id can not contain space.</div>
           <span *ngIf="submitted && f.count.errors?.required" class="error">count field is required</span>
+          <div *ngIf="submitted && f.count.errors?.cannotContainSpace" class="error">Count can not contain space.</div>
         </div>
         <div>
           <form class="login-form product_form" [formGroup]="product_form" (ngSubmit)="createProduct()">
             <div style="margin-bottom: 1vw" class="form-group">
               <mat-form-field class="login-full-width">
-                <mat-label>Product ID</mat-label>
+                <mat-label>Product ID *</mat-label>
                 <input
                   matInput
                   value=""
@@ -369,7 +389,7 @@
             </div>
             <div style="margin-bottom: 1vw">
               <mat-form-field class="login-full-width">
-                <mat-label>Product Name</mat-label>
+                <mat-label>Product Name *</mat-label>
                 <input
                   matInput
                   value=""
@@ -381,7 +401,7 @@
             </div>
             <div style="margin-bottom: 1vw">
               <mat-form-field class="login-full-width">
-                <mat-label>Category</mat-label>
+                <mat-label>Category *</mat-label>
                 <mat-select
                   [(ngModel)]="selectedCategory"
                   (selectionChange)="onOptionsSelected($event)"
@@ -398,7 +418,7 @@
             </div>
             <div style="margin-bottom: 1vw">
               <mat-form-field class="login-full-width">
-                <mat-label>Sub Category</mat-label>
+                <mat-label>Sub Category *</mat-label>
                 <mat-select
                   [(ngModel)]="selectedSubCategory"
                   formControlName="sub_category"
@@ -413,7 +433,7 @@
             </div>
             <div style="margin-bottom: 1vw">
               <mat-form-field class="login-full-width">
-                <mat-label>SKU</mat-label>
+                <mat-label>SKU *</mat-label>
                 <input
                   matInput
                   value=""
@@ -425,7 +445,7 @@
             </div>
             <div style="margin-bottom: 1vw">
               <mat-form-field class="login-full-width">
-                <mat-label>Description</mat-label>
+                <mat-label>Description *</mat-label>
                 <input
                   matInput
                   value=""
@@ -437,11 +457,12 @@
             </div>
             <div style="margin-bottom: 1vw">
               <mat-form-field class="login-full-width">
-                <mat-label>Price</mat-label>
+                <mat-label>Price *</mat-label>
                 <input
                   type="number"
                   matInput
                   value=""
+                  (keydown)="onKeydown($event)"
                   formControlName="price"
                   [ngClass]="{ 'is-invalid': submitted && f.price.errors }"
                 />
@@ -449,25 +470,28 @@
             </div>
             <div style="margin-bottom: 1vw" class="form-group">
               <mat-form-field class="login-full-width">
-                <mat-label>Tax</mat-label>
+                <mat-label>Tax *</mat-label>
                 <input
                   matInput
                   value=""
                   [(ngModel)]="tax_amt"
                   formControlName="tax"
+                  maxlength="4"
                   [ngClass]="{ 'is-invalid': submitted && f.tax.errors }"
                 />
+                <span matSuffix>%&nbsp;</span>
                 <!-- <span  class="percentage">%</span> -->
               </mat-form-field>
             </div>
             <div style="margin-bottom: 1vw">
               <mat-form-field class="login-full-width">
-                <mat-label>Count</mat-label>
+                <mat-label>Count *</mat-label>
                 <input
                   type="number"
                   matInput
                   value=""
                   formControlName="count"
+                  (keydown)="onKeydown($event)"
                   [ngClass]="{ 'is-invalid': submitted && f.count.errors }"
                 />
               </mat-form-field>

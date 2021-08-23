@@ -101,9 +101,9 @@ export class ProductService {
   //     catchError(() => of([]))
   //   );
   // }
-  fileDownload(): Observable<any> {
-    return this.httpClient.get('media/sample/inventory.csv', { responseType: 'blob' });
-  }
+  // fileDownload(): Observable<any> {
+  //   return this.httpClient.get('media/sample/inventory.csv', { responseType: 'blob' });
+  // }
   // getCategory() {
   //   let data = this.CredentialsService.getToken();
   //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + data);

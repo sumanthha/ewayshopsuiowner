@@ -6,7 +6,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { Logger, UntilDestroy, untilDestroyed } from '@core';
 import { AuthenticationService } from './authentication.service';
-import { CredentialsService } from './credentials.service';
 const log = new Logger('Login');
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -34,12 +33,11 @@ export class LoginComponent implements OnInit {
     private Spinner: NgxSpinnerService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
     private httpClient: HttpClient,
     private zone: NgZone,
-    private credentialsService: CredentialsService,
     private snackBar: MatSnackBar,
-    private CommonService: CommonService
+    private CommonService: CommonService,
+    private apiService: AuthenticationService
   ) {}
 
   ngOnInit() {
@@ -61,39 +59,17 @@ export class LoginComponent implements OnInit {
       formData.append('password', this.loginForm.value.password);
       this.error = '';
       this.Spinner.show();
-      this.httpClient.post('login/', formData).subscribe((data: any) => {
+      this.apiService.login(formData).subscribe((data: any) => {
         this.Spinner.hide();
         if (data['role'] == 'store' && data['status'] == 'ok') {
           localStorage.setItem('profileName', data.fname);
           if (data.photo) {
             localStorage.setItem('profilePic', data.photo);
           }
+          this.CommonService.updateIdentity(localStorage.getItem('profilePic'), localStorage.getItem('profileName'));
           localStorage.setItem('access', data['access']);
           localStorage.setItem('refresh', data['refresh']);
-          this.CommonService.updateIdentity(localStorage.getItem('profilePic'), localStorage.getItem('profileName'));
-          this.router.navigate([this.route.snapshot.queryParams.redirect || '/home'], { replaceUrl: true });
-          // const login$ = this.authenticationService.login(data);
-          // login$
-          //   .pipe(
-          //     finalize(() => {
-          //       this.loginForm.markAsPristine();
-          //     }),
-          //     untilDestroyed(this)
-          //   )
-          //   .subscribe(
-          //     (credentials) => {
-          //       log.debug(`${credentials.access} successfully logged in`);
-          //       this.router.navigate([this.route.snapshot.queryParams.redirect || '/home'], { replaceUrl: true });
-          //     },
-          //     (error) => {
-          //       log.debug(`Login error: ${error}`);
-          //       this.error = error;
-          //     }
-          //   );
-          this.snackBar.open(data.message, 'Close', {
-            duration: 4000,
-            verticalPosition: 'top',
-          });
+          this.router.navigate(['/home'], { replaceUrl: true });
         } else if (data['role'] == 'superuser' && data['status'] == 'ok') {
           this.snackBar.open('User Doest Exist', 'Close', {
             duration: 4000,

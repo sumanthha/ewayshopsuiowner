@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ReturnStatement } from '@angular/compiler';
 import { AuthenticationService } from '../auth/authentication.service';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import * as moment from 'moment';
 export interface ManageCustomerData {
   id: number;
   first_name: string;
@@ -30,10 +32,12 @@ export class OrdersComponent implements OnInit {
     'id',
     'order_no',
     'ordered_on',
+
     'customer_no',
     'amount',
     'prefer_pickup_time',
     'est_pickup_time',
+    'feedback',
     'order_status',
     'action',
   ];
@@ -42,14 +46,14 @@ export class OrdersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   GetBranch: any = [];
+  time: string;
+  start_time: any;
   display: any = 'none';
   display2: any = 'none';
-  start_time: any;
   BranchTable: any;
   end_time: any;
   order_id: any;
   Est_date: any;
-
   validEsttime: boolean = true;
   valid_starttime: boolean = true;
   valid_endtime: boolean = true;
@@ -64,6 +68,7 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.Spinner.show();
+    this.formatAMPM(this.minDate);
     this.authenticationService.GetOrder().subscribe((response) => {
       this.GetBranch = [];
       this.Spinner.hide();
@@ -87,6 +92,7 @@ export class OrdersComponent implements OnInit {
             est_pickup_time: orders['est_from_date'],
             est_starttime: orders['est_start_time'],
             est_endtime: orders['est_end_time'],
+            report_feedback: orders['report_feedback'],
             is_showcalander: this.TimeCalander,
           };
           this.GetBranch.push(obj);
@@ -103,6 +109,22 @@ export class OrdersComponent implements OnInit {
     if (this.BranchTable.paginator) {
       this.BranchTable.paginator.firstPage();
     }
+  }
+  formatAMPM(date: any) {
+    this.timeSupport(date);
+  }
+  timeSupport(date: any) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    this.time = strTime;
+  }
+  timeCheck(e: any) {
+    console.log('timetest', this.start_time);
   }
 
   modalOpen(order_id: any) {
@@ -128,9 +150,10 @@ export class OrdersComponent implements OnInit {
         let status_req = {
           order_status: status,
           reason: text,
+          order_id: Order_id,
         };
         this.Spinner.show();
-        this.authenticationService.orderStatus_Update(Order_id, status_req).subscribe((response) => {
+        this.authenticationService.orderStatus_Update(status_req).subscribe((response) => {
           this.Spinner.hide();
           if (response['status'] == 'ok') {
             Swal.fire('Success', ' Order Status Updated Successfully', 'success');
@@ -152,9 +175,10 @@ export class OrdersComponent implements OnInit {
           let status_req = {
             order_status: status,
             reason: '',
+            order_id: Order_id,
           };
           this.Spinner.show();
-          this.authenticationService.orderStatus_Update(Order_id, status_req).subscribe((response) => {
+          this.authenticationService.orderStatus_Update(status_req).subscribe((response) => {
             this.Spinner.hide();
             if (response['status'] == 'ok') {
               if (status == 'ready for pickup') {
@@ -196,8 +220,19 @@ export class OrdersComponent implements OnInit {
     this.end_time = '';
   }
   onChangeHour(event: any) {}
-  EndDateChange(event: any) {
-    this.Est_date = event.target.value;
+  // EndDateChange(event: any) {
+  //   this.Est_date = event.target.value;\
+
+  // }
+  EndDateChange(event: MatDatepickerInputEvent<moment.Moment>) {
+    this.Est_date = event.value;
+    let b = moment(this.Est_date).format('YYYY-MM-DD');
+    let b1 = moment(this.minDate).format('YYYY-MM-DD');
+    if (b > b1) {
+      this.timeSupport(this.Est_date);
+    } else {
+      this.timeSupport(this.minDate);
+    }
   }
   update_Est_Time() {
     if (this.Est_date == '' || this.Est_date == undefined) {
@@ -222,9 +257,10 @@ export class OrdersComponent implements OnInit {
       est_from_date: this.Est_date,
       est_start_time: this.start_time,
       est_end_time: this.end_time,
+      order_id: this.order_id,
     };
     this.Spinner.show();
-    this.authenticationService.time_Update(this.order_id, data).subscribe((response) => {
+    this.authenticationService.time_Update(data).subscribe((response) => {
       this.Spinner.hide();
       this.GetBranch = [];
       if (response['status'] == 'ok') {

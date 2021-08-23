@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SignupService } from './sign-up.service';
 import { MapsAPILoader } from '@agm/core';
@@ -22,6 +22,7 @@ export class SignUpComponent implements OnInit {
   city: any;
   state: any;
   phone_no: any;
+  showlocation: boolean = true;
   constructor(
     private Spinner: NgxSpinnerService,
     private mapsAPILoader: MapsAPILoader,
@@ -36,15 +37,15 @@ export class SignUpComponent implements OnInit {
   submitted = false;
   ngOnInit(): void {
     this.signup_form = this.formBuilder.group({
-      name: ['', [Validators.required, this.noWhitespaceValidator]],
-      email: ['', [Validators.required, Validators.email]],
+      name: ['', [Validators.required, UsernameValidator.cannotContainSpace]],
+      email: ['', [Validators.required, UsernameValidator.cannotContainSpace]],
       terms: [false, Validators.requiredTrue],
-      location: ['', Validators.required],
-      phoneno: ['', Validators.required],
-      branch_name: ['', Validators.required],
-      zipcode: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
+      location: ['', [Validators.required, UsernameValidator.cannotContainSpace]],
+      phoneno: ['', [Validators.required, UsernameValidator.cannotContainSpace]],
+      branch_name: ['', [Validators.required, UsernameValidator.cannotContainSpace]],
+      zipcode: ['', [Validators.required, UsernameValidator.cannotContainSpace]],
+      city: ['', [Validators.required, UsernameValidator.cannotContainSpace]],
+      state: ['', [Validators.required, UsernameValidator.cannotContainSpace]],
     });
     this.ngZone.run(() => {
       this.mapsAPILoader.load().then(() => {
@@ -113,18 +114,28 @@ export class SignUpComponent implements OnInit {
     }
     // this.submitted = true;
     let country_code = '+1';
+    if (this.signup_form.value.location == undefined) {
+      this.showlocation = false;
+      return false;
+    } else {
+      this.showlocation = true;
+      if (this.latitude == '' && this.longitude == '') {
+        this.showlocation = false;
+        return false;
+      }
+    }
     if (this.signup_form.valid) {
       let data = {
-        branch_name: this.signup_form.value.branch_name,
-        email: this.signup_form.value.email,
-        first_name: this.signup_form.value.name,
-        phone_number: country_code + this.signup_form.value.phoneno,
+        branch_name: this.signup_form.value.branch_name.replace(/\s/g, ''),
+        email: this.signup_form.value.email.replace(/\s/g, ''),
+        first_name: this.signup_form.value.name.replace(/\s/g, ''),
+        phone_number: country_code + this.signup_form.value.phoneno.replace(/\s/g, ''),
         address: this.signup_form.value.location,
         latitude: this.latitude,
         longitude: this.longitude,
-        zipcode: this.signup_form.value.zipcode,
-        state: this.signup_form.value.state,
-        city: this.signup_form.value.city,
+        zipcode: this.signup_form.value.zipcode.replace(/\s/g, ''),
+        state: this.signup_form.value.state.replace(/\s/g, ''),
+        city: this.signup_form.value.city.replace(/\s/g, ''),
       };
 
       this.Spinner.show();
@@ -132,7 +143,7 @@ export class SignUpComponent implements OnInit {
         this.Spinner.hide();
         if (response['status'] == 'ok') {
           Swal.fire(
-            'Registration Successfull',
+            'Registration Successfully',
             'An email has been sent to your account.Can you check your e-mail and reset your password',
             'success'
           );
@@ -156,10 +167,32 @@ export class SignUpComponent implements OnInit {
     k = event.charCode; //         k = event.keyCode;  (Both can be used)
     return (k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57);
   }
+  OnlyNumbers(event: any) {
+    let regex: RegExp = new RegExp(/^[0-9]{1,}$/g);
+    let specialKeys: Array<string> = ['Backspace', 'Tab', 'End', 'Home', 'ArrowRight', 'ArrowLeft'];
+    if (specialKeys.indexOf(event.key) !== -1) {
+      return;
+    } else {
+      if (regex.test(event.key)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 
   public noWhitespaceValidator(control: FormControl) {
     const isWhitespace = (control.value || '').trim().length === 0;
     const isValid = !isWhitespace;
     return isValid ? null : { whitespace: true };
+  }
+}
+export class UsernameValidator {
+  static cannotContainSpace(control: AbstractControl): ValidationErrors | null {
+    var value = control.value?.trim();
+    if (value == 0) {
+      return { cannotContainSpace: true };
+    }
+    return null;
   }
 }

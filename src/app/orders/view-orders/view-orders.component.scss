@@ -10,7 +10,11 @@
   margin-top: 2vw;
   padding: 20px;
 }
-
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  padding: 0% !important;
+}
 .logo-icons {
   height: 26px;
   width: 27px;

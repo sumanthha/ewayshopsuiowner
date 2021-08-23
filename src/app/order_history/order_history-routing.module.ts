@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { Shell } from '@app/shell/shell.service';
 import { OrderHistoryComponent } from './order_history.component';
+import { AuthGuardService } from '@app/auth';
 
 // const routes: Routes = [
 //   // Module is lazy loaded, see app-routing.module.ts
@@ -12,7 +13,12 @@ import { OrderHistoryComponent } from './order_history.component';
 const routes: Routes = [
   Shell.childRoutes([
     { path: '', redirectTo: '/order-history', pathMatch: 'full' },
-    { path: 'order-history', component: OrderHistoryComponent, data: { title: marker('discount') } },
+    {
+      path: 'order-history',
+      component: OrderHistoryComponent,
+      canActivate: [AuthGuardService],
+      data: { title: marker('discount') },
+    },
   ]),
 ];
 

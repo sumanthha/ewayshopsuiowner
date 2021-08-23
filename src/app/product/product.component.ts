@@ -21,6 +21,7 @@ import Swal from 'sweetalert2';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HighlightSpanKind } from 'typescript';
 import { AuthenticationService } from '../auth/authentication.service';
+import { environment } from '../../environments/environment';
 export interface ManageCustoData {
   sno: any;
   product_name: any;
@@ -234,6 +235,7 @@ export class ProductComponent implements OnInit {
           this.snackBar.open('Product Updated Successfully', 'Close', {
             duration: 2000,
           });
+          this.selectedFile = null;
           this.showProduct_table = true;
           this.showEdit = false;
           this.showView = false;
@@ -269,13 +271,13 @@ export class ProductComponent implements OnInit {
     this.checkImage();
     var self = this;
     const bucket = new S3({
-      accessKeyId: '',
-      secretAccessKey: '',
-      region: 'us-east-1',
+      accessKeyId: environment.S3_accessKeyId,
+      secretAccessKey: environment.S3_secretAccessKey,
+      region: environment.S3_region,
     });
     const contentType = name.type;
     const params = {
-      Bucket: '',
+      Bucket: environment.S3_bucket,
       Key: name.name,
       Body: name,
       ACL: 'public-read',

@@ -7,8 +7,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { NotificationService } from './notifications.service';
-import Swal from 'sweetalert2';
 import { AuthenticationService } from '../auth/authentication.service';
+import Swal from 'sweetalert2';
 export interface ManageCustomerData {
   id: number;
   first_name: string;
@@ -49,9 +49,10 @@ export class NotificationComponent implements OnInit {
     this.selected_orderid = [];
     this.Spinner.show();
     this.authenticationService.GetNotification().subscribe((response) => {
+      debugger;
       this.Spinner.hide();
       this.GetNotification = [];
-      if (response['status'] == 'ok') {
+      if (response['status'] == 'OK') {
         response['data'].forEach((notify: any, index: any) => {
           let obj = {
             sno: index + 1,
@@ -61,6 +62,8 @@ export class NotificationComponent implements OnInit {
             created_on: notify['created_on'],
             id: notify['id'],
             address: notify['address'],
+            phone_no: notify['phone_no'],
+            customer_name: notify['customer_name'],
           };
           this.GetNotification.push(obj);
         });

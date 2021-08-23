@@ -2,7 +2,14 @@
   <div class="row no-gutters">
     <div [ngClass]="sideBarOpen ? 'col-md-3 sidebar_container' : 'col-md-1 sidebar_container closed_sidebar'">
       <div class="side_logo_cont">
-        <img *ngIf="sideBarOpen" src=".././../assets/login/logo.png" class="w-100 side_logo" alt="e-wayshop" />
+        <img
+          *ngIf="sideBarOpen"
+          style="cursor: pointer"
+          (click)="home()"
+          src=".././../assets/login/logo.png"
+          class="w-100 side_logo"
+          alt="e-wayshop"
+        />
         <img
           *ngIf="!sideBarOpen"
           src=".././../assets/dashboard/white-icon.png"

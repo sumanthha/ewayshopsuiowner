@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { Shell } from '@app/shell/shell.service';
 import { DiscountComponent } from './discount.component';
+import { AuthGuardService } from '@app/auth';
 
 // const routes: Routes = [
 //   // Module is lazy loaded, see app-routing.module.ts
@@ -12,7 +13,12 @@ import { DiscountComponent } from './discount.component';
 const routes: Routes = [
   Shell.childRoutes([
     { path: '', redirectTo: '/discount', pathMatch: 'full' },
-    { path: 'discount', component: DiscountComponent, data: { title: marker('discount') } },
+    {
+      path: 'discount',
+      component: DiscountComponent,
+      canActivate: [AuthGuardService],
+      data: { title: marker('discount') },
+    },
   ]),
 ];
 

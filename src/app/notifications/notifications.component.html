@@ -18,21 +18,32 @@
     <span class="delete_text" *ngIf="GetNotification.length > 0">Delete</span>
   </div>
 </div>
-<div class="container p-0">
+<div class="container p-0 notification_div" style="height: 600px; overflow-y: scroll">
   <div class="row no-gutters">
     <div class="col-md-12" *ngIf="GetNotification.length > 0">
       <div _ngcontent-dtd-c223="" class="help-box" *ngFor="let notify of GetNotification">
         <div _ngcontent-dtd-c223="" class="row">
           <div _ngcontent-dtd-c223="" class="col">
             <p _ngcontent-dtd-c223="" class="order_desc">
-              {{ notify.desc }}.Order NO <span class="order_id">{{ notify.order_id }}</span>
+              <!-- You order has been received
+              <span style="cursor: pointer" [routerLink]="['/orders/view-orders', notify.order_id]"
+                >{{ notify.order_id }} </span
+              > -->
+              <span style="cursor: pointer" [routerLink]="['/orders/view-orders', notify.order_id]"
+                >{{ notify.desc }}
+              </span>
+              at {{ notify.created_on }} ago
             </p>
 
-            <p class="order_date">
-              {{ notify.created_on | date: 'MM-dd-yyyy'
-              }}<span *ngIf="notify.address != null" style="font-weight: 600; color: black !important"> Location</span>
-              <span>( {{ notify.address }} )</span>
+            <p style="display: flex; align-items: center">
+              <mat-icon style="margin-top: 8px; margin-right: 10px"> person_pin</mat-icon
+              ><span> : {{ notify.customer_name }} </span>
+              <mat-icon style="margin-left: 20px; margin-top: 8px; margin-right: 10px">phone_in_talk</mat-icon> :
+              {{ notify.phone_no }}
             </p>
+            <!-- <p style="display: flex;align-items: center;">
+              <mat-icon style="margin-top: 8px;margin-right: 10px;">phone_in_talk</mat-icon> : {{notify.phone_no}} 
+            </p> -->
           </div>
           <input type="checkbox" class="check_box" (change)="onCheckboxChange($event, notify.id)" />
         </div>

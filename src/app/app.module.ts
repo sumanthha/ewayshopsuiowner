@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,7 +10,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { environment } from '@env/environment';
 import { CoreModule } from '@core';
 import { SharedModule } from '@shared';
-import { AuthModule } from '@app/auth';
+import { AuthModule, AuthenticationService } from '@app/auth';
 import { HomeModule } from './home/home.module';
 import { ShellModule } from './shell/shell.module';
 import { AppComponent } from './app.component';
@@ -26,7 +26,8 @@ import { AgmCoreModule } from '@agm/core';
 import { CommonService } from '../../src/app/common/common.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
+import { HttpInterceptorBaseAuthService } from './auth/token.interceptor';
+import { AuthGuardService as AuthGuard } from '../app/auth/authentication.guard';
 @NgModule({
   imports: [
     BrowserModule,
@@ -58,7 +59,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatInputModule, // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],
-  providers: [CommonService],
+  providers: [
+    AuthenticationService,
+    CommonService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorBaseAuthService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

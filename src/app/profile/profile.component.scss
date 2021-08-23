@@ -202,3 +202,16 @@ img.profile_image {
   margin-left: 23px;
   border-radius: 6px;
 }
+@media only screen and (min-width: 1300px) and (max-width: 1950px) {
+  .image_input {
+    width: 341px !important;
+    margin-top: 15px !important;
+  }
+  .cloud_icon {
+    margin-top: -4.5vw !important;
+    margin-right: -22vw !important;
+  }
+  .address_input {
+    width: 319px !important;
+  }
+}

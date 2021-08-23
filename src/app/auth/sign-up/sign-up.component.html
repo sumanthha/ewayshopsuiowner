@@ -33,15 +33,39 @@
               <span *ngIf="submitted && f.branch_name.errors?.required" class="error"
                 >Store Name field is required</span
               >
+              <span *ngIf="submitted && f.branch_name.errors?.cannotContainSpace" class="error"
+                >Store Name can not contain space.</span
+              >
               <span *ngIf="submitted && f.name.errors?.required" class="error">Name is required</span>
+              <span *ngIf="submitted && f.name.errors?.cannotContainSpace" class="error"
+                >Name can not contain space.</span
+              >
               <span *ngIf="submitted && f.email.errors?.required" class="error">Email is required</span>
-              <span *ngIf="submitted && f.email.errors?.email" class="error">Please enter the valid email address</span>
+              <span *ngIf="submitted && f.email.errors?.cannotContainSpace" class="error"
+                >Email can not contain space.</span
+              >
               <span *ngIf="submitted && f.phoneno.errors?.required" class="error">Phone no is required</span>
+              <span *ngIf="submitted && f.phoneno.errors?.cannotContainSpace" class="error"
+                >Phone no can not contain space.</span
+              >
               <span *ngIf="submitted && f.location.errors?.required" class="error">Location is required</span>
+              <span *ngIf="submitted && f.location.errors?.cannotContainSpace" class="error"
+                >Location can not contain space.</span
+              >
               <span *ngIf="submitted && f.zipcode.errors?.required" class="error">Zipcode is required</span>
+              <span *ngIf="submitted && f.zipcode.errors?.cannotContainSpace" class="error"
+                >Zipcode can not contain space.</span
+              >
               <span *ngIf="submitted && f.city.errors?.required" class="error">City is required</span>
+              <span *ngIf="submitted && f.city.errors?.cannotContainSpace" class="error"
+                >City can not contain space.</span
+              >
               <span *ngIf="submitted && f.state.errors?.required" class="error">State is required</span>
+              <span *ngIf="submitted && f.state.errors?.cannotContainSpace" class="error"
+                >State can not contain space.</span
+              >
               <span *ngIf="submitted && f.terms.errors?.required" class="error">Accept terms and conditions</span>
+              <p style="color: red; font-size: 15px" [hidden]="showlocation">Choose Google map location</p>
             </div>
 
             <form class="login-form" [formGroup]="signup_form" (ngSubmit)="signup()">
@@ -50,6 +74,7 @@
                 <input
                   matInput
                   value=""
+                  maxlength="100"
                   formControlName="branch_name"
                   (keypress)="omit_special_char($event)"
                   [ngClass]="{ 'is-invalid': submitted && f.branch_name.errors }"
@@ -60,6 +85,7 @@
                 <input
                   matInput
                   value=""
+                  maxlength="30"
                   formControlName="name"
                   (keypress)="omit_special_char($event)"
                   [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
@@ -84,6 +110,7 @@
                     value=""
                     [(ngModel)]="phone_no"
                     maxlength="15"
+                    (keypress)="OnlyNumbers($event)"
                     formControlName="phoneno"
                     [ngClass]="{ 'is-invalid': submitted && f.phoneno.errors }"
                   />
@@ -118,8 +145,8 @@
                 <mat-label>City</mat-label>
                 <input
                   matInput
+                  maxlength="30"
                   value=""
-                  maxlength="15"
                   formControlName="city"
                   [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
                 />
@@ -128,8 +155,8 @@
                 <mat-label>state</mat-label>
                 <input
                   matInput
+                  maxlength="30"
                   value=""
-                  maxlength="15"
                   formControlName="state"
                   [ngClass]="{ 'is-invalid': submitted && f.state.errors }"
                 />
@@ -142,9 +169,13 @@
                   [ngClass]="{ 'is-invalid': submitted && f.terms.errors }"
                 />
                 By signing up I agree to the
-                <a href="javascript:void(0);" class="forget-link" (click)="termandconditions()">Terms and conditions</a>
+                <a href="javascript:void(0);" class="forget-link" [routerLink]="['/termandconditions']" target="_blank"
+                  >Terms and conditions</a
+                >
                 and
-                <a href="javascript:void(0);" class="forget-link" (click)="privacy()"> Privacy policy</a>
+                <a href="javascript:void(0);" class="forget-link" [routerLink]="['/privacy']" target="_blank">
+                  Privacy policy</a
+                >
               </p>
 
               <div class="login_btn_container">

@@ -3,10 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MediaObserver } from '@angular/flex-layout';
 import { CommonService } from '../common/common.service';
-import { AuthenticationService, CredentialsService } from '@app/auth';
+import { AuthenticationService } from '@app/auth';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NotificationService } from '../notifications/notifications.service';
 import { ProfileService } from '../../app/profile/profile.service';
+
 @Component({
   selector: 'app-shell',
   templateUrl: './shell.component.html',
@@ -18,7 +19,6 @@ export class ShellComponent implements OnInit {
     private router: Router,
     private titleService: Title,
     private authenticationService: AuthenticationService,
-    private credentialsService: CredentialsService,
     private media: MediaObserver,
     private CommonService: CommonService,
     private spinner: NgxSpinnerService,
@@ -62,7 +62,9 @@ export class ShellComponent implements OnInit {
       this.profileName = res;
     });
   }
-
+  home() {
+    this.router.navigate(['home']);
+  }
   showSubSubMenu1() {
     if (!this.isShowing1) {
       this.isShowing1 = true;
@@ -89,10 +91,10 @@ export class ShellComponent implements OnInit {
     this.authenticationService.logout();
   }
 
-  get username(): string | null {
-    const credentials = this.credentialsService.credentials;
-    return credentials ? credentials.access : null;
-  }
+  // get username(): string | null {
+  //   const credentials = this.credentialsService.credentials;
+  //   return credentials ? credentials.access : null;
+  // }
 
   get isMobile(): boolean {
     return this.media.isActive('xs') || this.media.isActive('sm');

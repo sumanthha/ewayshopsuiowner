@@ -4,7 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ForgetService } from './forgot-rest.service';
-import { AuthenticationService } from '../authentication.service';
+
 @Component({
   selector: 'app-forgotpass',
   templateUrl: './forgotpass.component.html',
@@ -33,8 +33,7 @@ export class ForgotpassComponent implements OnInit {
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private authenticationService: AuthenticationService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +55,7 @@ export class ForgotpassComponent implements OnInit {
   forgotPassword() {
     if (this.forgotForm.valid) {
       this.Spinner.show();
-      this.authenticationService.forgot_Password(this.forgotForm.value.email).subscribe(
+      this.ForgetPasswordService.forgot_Password(this.forgotForm.value.email).subscribe(
         (response) => {
           this.Spinner.hide();
           if (response['status'] == 'ok') {
@@ -66,7 +65,7 @@ export class ForgotpassComponent implements OnInit {
             });
             this.router.navigateByUrl('login');
           } else {
-            this.snackBar.open('Sorry,not able to send reset link', 'Close', {
+            this.snackBar.open('Please enter registered mail address', 'Close', {
               duration: 4000,
               verticalPosition: 'top',
             });

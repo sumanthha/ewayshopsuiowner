@@ -97,10 +97,10 @@ export class OrderHistoryComponent implements OnInit {
   ngOnInit() {
     this.selectedBranch = 'all';
     this.Spinner.show();
-    this.authenticationService.GetOrder().subscribe((response) => {
+    this.authenticationService.GetOrderHistory(this.selectedBranch).subscribe((response) => {
       this.Spinner.hide();
       this.GetBranch = [];
-      if (response['status'] == 'ok') {
+      if (response['status'] == 'OK') {
         response['data'].forEach((order: any, index: any) => {
           let obj = {
             sno: index + 1,
@@ -110,6 +110,8 @@ export class OrderHistoryComponent implements OnInit {
             phone_no: order['customerlist'][0]['phone_number'],
             email_id: order['customerlist'][0]['email'],
             address: order['customerlist'][0]['address'],
+            city: order['customerlist'][0]['city'],
+            state: order['customerlist'][0]['state'],
             order_status: order.order_status,
           };
           this.GetBranch.push(obj);

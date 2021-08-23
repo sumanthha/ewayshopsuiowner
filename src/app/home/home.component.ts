@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NotificationService } from '../notifications/notifications.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { AuthenticationService } from '../auth/authentication.service';
+import { AuthenticationService } from '@app/auth/authentication.service';
 export interface PeriodicElement {
   orderid: any;
   date: any;
@@ -77,10 +77,9 @@ export class HomeComponent implements OnInit {
   constructor(
     private quoteService: QuoteService,
     private CommonService: CommonService,
-    private OrdersService: OrdersService,
+    private apiService: AuthenticationService,
     private Spinner: NgxSpinnerService,
-    private NotificationService: NotificationService,
-    private authenticationService: AuthenticationService
+    private NotificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -105,7 +104,7 @@ export class HomeComponent implements OnInit {
         this.quote = quote;
       });
     this.Spinner.show();
-    this.authenticationService.GetOrders_count().subscribe((response) => {
+    this.apiService.GetOrders_count().subscribe((response) => {
       this.Spinner.hide();
       if (response['status'] == 'OK') {
         this.Neworder_count = response['new'];
@@ -115,7 +114,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.Spinner.show();
-    this.authenticationService.GetNotificationCount().subscribe((response) => {
+    this.apiService.GetNotificationCount().subscribe((response) => {
       this.Spinner.hide();
       if (response['status'] == 'ok') {
         this.CommonService.notification_count(response['data']);
@@ -123,7 +122,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.Spinner.show();
-    this.authenticationService.GetOrderInventory_list().subscribe((response) => {
+    this.apiService.GetOrderInventory_list().subscribe((response) => {
       this.Spinner.hide();
       if (response['status'] == 'ok') {
         response['data'].forEach((orders: any, index: any) => {
@@ -139,7 +138,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.Spinner.show();
-    this.authenticationService.GetNewOrders_list().subscribe((response) => {
+    this.apiService.GetNewOrders_list().subscribe((response) => {
       this.Spinner.hide();
       if (response['status'] == 'OK') {
         this.new_list = [];

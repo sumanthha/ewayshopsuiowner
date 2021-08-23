@@ -61,11 +61,18 @@ export class ViewOrdersComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.Spinner.show();
-    this.authenticationService.GetSingleOrder(this.id).subscribe((response) => {
+    let data = {
+      order_id: this.id,
+    };
+    this.authenticationService.GetSingleOrder(data).subscribe((response) => {
       this.Spinner.hide();
       this.GetOrder = [];
       if (response['status'] == 'ok') {
-        if (response['data'].order_status == 'rejected') {
+        if (
+          response['data'].order_status == 'rejected' ||
+          response['data'].order_status == 'refund issued' ||
+          response['data'].order_status == 'incomplete'
+        ) {
           this.displayedColumns = [
             'id',
             'order_no',
@@ -88,6 +95,7 @@ export class ViewOrdersComponent implements OnInit {
             'Item_image',
             'unit_price',
             'total_amount',
+            'payment_type',
             'order_status',
           ];
         }
@@ -104,6 +112,7 @@ export class ViewOrdersComponent implements OnInit {
             order_status: response['data'].order_status,
             reson: response['data'].reason,
             quantity: order['quantity'],
+            payment_type: response['data'].payment_type,
           };
           this.GetOrder.push(obj);
         });
@@ -115,6 +124,8 @@ export class ViewOrdersComponent implements OnInit {
             phone_no: customer.phone_number,
             gender: customer.gender,
             address: customer.address,
+            city: customer.city,
+            state: customer.state,
           };
           this.GetCustomer.push(obj);
         });

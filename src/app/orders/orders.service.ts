@@ -33,7 +33,7 @@ export class OrdersService {
   // GetSingleOrder(id: any) {
   //   let token = this.CredentialsService.getToken();
   //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-  //   return this.httpClient.get('store/order/' + id, { headers }).pipe(
+  //   return this.httpClient.post('store/order/', id, { headers }).pipe(
   //     map((body: any) => {
   //       if (body) {
   //         return body;
@@ -87,10 +87,10 @@ export class OrdersService {
   //   );
   // }
 
-  // orderStatus_Update(id: any, status: any) {
+  // orderStatus_Update(status: any) {
   //   let token = this.CredentialsService.getToken();
   //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-  //   return this.httpClient.put('store/order_status_update/' + id, status, { headers }).pipe(
+  //   return this.httpClient.put('store/order_status_update', status, { headers }).pipe(
   //     map((body: any) => {
   //       if (body) {
   //         return body;
@@ -101,10 +101,10 @@ export class OrdersService {
   //     catchError(() => of([]))
   //   );
   // }
-  // time_Update(id: any, status: any) {
+  // time_Update(status: any) {
   //   let token = this.CredentialsService.getToken();
   //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-  //   return this.httpClient.put('store/update_timemanagement/' + id, status, { headers }).pipe(
+  //   return this.httpClient.put('store/update_timemanagement/', status, { headers }).pipe(
   //     map((body: any) => {
   //       if (body) {
   //         return body;

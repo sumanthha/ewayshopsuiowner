@@ -19,6 +19,7 @@ export class NotificationService {
   //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
   //   return this.httpClient.get('store/notification_get/', { headers }).pipe(
   //     map((body: any) => {
+  //       debugger;
   //       if (body) {
   //         return body;
   //       } else {
@@ -39,7 +40,8 @@ export class NotificationService {
   //       delete_id: data,
   //     },
   //   };
-
+  //   //let token = this.CredentialsService.getToken();
+  //   // const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token)
   //   return this.httpClient.delete('store/notification_delete/', options).pipe(
   //     map((body: any) => {
   //       if (body) {

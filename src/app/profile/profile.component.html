@@ -15,11 +15,11 @@
           <h6 class="shop_id">{{ branch_address }}</h6>
         </div>
         <div class="orders_info">
-          <div class="order_box">
+          <!-- <div class="order_box">
             <img src="../../assets/profile/person.png" alt="order" />
             <h3 class="count">{{ Getcustomer_count }}</h3>
             <span>Customers</span>
-          </div>
+          </div> -->
           <div class="order_box">
             <img src="../../assets/profile/bag.png" alt="order" />
             <h3 class="count">{{ GetOrders_count }}</h3>
@@ -45,6 +45,13 @@
         </div>
         <div class="profile_form">
           <form>
+            <div class="form_row">
+              <label>Shop Name</label>
+
+              <input type="text" class="form__input" name="branch_name" [(ngModel)]="branch_name" />
+              <!-- <span><img src="../../assets/profile/map.png" alt="mapicon"></span> -->
+            </div>
+            <p style="color: red" [hidden]="validshopname">Shop Name is required</p>
             <div class="form_row">
               <label>Name</label>
 
@@ -76,7 +83,14 @@
             <p style="color: red" [hidden]="validemail">Email is required</p>
             <div class="form_row">
               <label>Phone Number</label>
-              <input type="text" class="form__input" name="phone_no" [(ngModel)]="phone_no" />
+              <input
+                type="text"
+                class="form__input"
+                (keypress)="OnlyNumbers($event)"
+                name="phone_no"
+                maxlength="15"
+                [(ngModel)]="phone_no"
+              />
               <span><img src="../../assets/profile/phone.png" alt="mapicon" /></span>
             </div>
             <p style="color: red" [hidden]="validphoneno">Phone number is required</p>
@@ -103,7 +117,9 @@
                 (click)="fileSelect.click()"
                 matTooltip="Select a Image file"
               >
-                <mat-icon style="float: right; margin-top: -4vw; margin-right: -21vw">cloud_upload</mat-icon>
+                <mat-icon style="float: right; margin-top: -4vw; margin-right: -21vw" class="cloud_icon"
+                  >cloud_upload</mat-icon
+                >
               </button>
             </div>
             <div class="form_row">
@@ -112,7 +128,7 @@
               <input
                 class="form__input image_input"
                 readonly
-                placeholder="Choose profile Image..."
+                placeholder="Choose Shop Image..."
                 name="store_image"
                 [(ngModel)]="store_image"
               />
@@ -123,7 +139,9 @@
                 (click)="fileSelect1.click()"
                 matTooltip="Select a Image file"
               >
-                <mat-icon style="float: right; margin-top: -4vw; margin-right: -21vw">cloud_upload</mat-icon>
+                <mat-icon style="float: right; margin-top: -4vw; margin-right: -21vw" class="cloud_icon"
+                  >cloud_upload</mat-icon
+                >
               </button>
             </div>
             <!-- <div class="profile_container">	

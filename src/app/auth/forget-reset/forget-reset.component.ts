@@ -5,7 +5,6 @@ import { environment } from '@env/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ForgetPasswordService } from './forget-rest.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AuthenticationService } from '../authentication.service';
 @Component({
   selector: 'app-forget-reset',
   templateUrl: './forget-reset.component.html',
@@ -40,8 +39,7 @@ export class ForgetResetComponent implements OnInit {
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private authenticationService: AuthenticationService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -103,7 +101,7 @@ export class ForgetResetComponent implements OnInit {
       // data.append('password', this.resetForm.value.confirm_password)
       // data.append('jwt_token', this.accesstoken)
       this.Spinner.show();
-      this.authenticationService.reset_Password(this.resetForm.value.confirm_password, this.accesstoken).subscribe(
+      this.ForgetPasswordService.reset_Password(this.resetForm.value.confirm_password, this.accesstoken).subscribe(
         (response) => {
           this.Spinner.hide();
           if (response['status'] == 'ok' && response['http_code'] == 200) {

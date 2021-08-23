@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { Shell } from '@app/shell/shell.service';
 import { ProductComponent } from './product.component';
+import { AuthGuardService } from '@app/auth';
 
 // const routes: Routes = [
 //   // Module is lazy loaded, see app-routing.module.ts
@@ -12,7 +13,12 @@ import { ProductComponent } from './product.component';
 const routes: Routes = [
   Shell.childRoutes([
     { path: '', redirectTo: '/product', pathMatch: 'full' },
-    { path: 'product', component: ProductComponent, data: { title: marker('product') } },
+    {
+      path: 'product',
+      component: ProductComponent,
+      canActivate: [AuthGuardService],
+      data: { title: marker('product') },
+    },
   ]),
 ];
 

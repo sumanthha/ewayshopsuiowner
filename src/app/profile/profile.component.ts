@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonService } from '../common/common.service';
 import { threadId } from 'worker_threads';
 import { NotificationService } from '../notifications/notifications.service';
-
+import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -212,13 +212,13 @@ export class ProfileComponent implements OnInit {
     this.Spinner.show();
     var self = this;
     const bucket = new S3({
-      accessKeyId: '',
-      secretAccessKey: '',
-      region: 'us-east-1',
+      accessKeyId: environment.S3_accessKeyId,
+      secretAccessKey: environment.S3_secretAccessKey,
+      region: environment.S3_region,
     });
     const contentType = name.type;
     const params = {
-      Bucket: 'maligai-sheet',
+      Bucket: environment.S3_bucket,
       Key: name.name,
       Body: name,
       ACL: 'public-read',
