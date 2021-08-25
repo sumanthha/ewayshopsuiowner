@@ -326,7 +326,6 @@ export class ProductComponent implements OnInit {
   }
 
   onFileSelect(event: any) {
-    debugger;
     this.selected_file = '';
     this.selectedFile = <File>event.target.files[0];
     if (

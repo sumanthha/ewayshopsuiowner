@@ -142,13 +142,7 @@ export class AuthenticationService {
     return this.http.delete<Response[]>(`${url}`);
   }
   product_Bulkupload(event: any) {
-    // let token = this.getToken();
-    // let httpOptions2 = {
-    //   headers: new HttpHeaders({
-    //     "Authorization": "Bearer " + token,
-    //     'enctype': 'multipart/form-data; boundary=----WebKitFormBoundaryuL67FWkv1CA',
-    //   })
-    // }
+    let token = this.getToken();
     const formData = new FormData();
     formData.append('csv', event);
     let url = this.api_url + 'store/bulk_upload/product';

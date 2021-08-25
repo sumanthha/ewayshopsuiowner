@@ -32,7 +32,7 @@ export class HttpInterceptorBaseAuthService implements HttpInterceptor {
       request = request.clone({
         setHeaders: {
           Authorization: 'Bearer ' + basicAuthHeaderString,
-          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/json',
           // 'Api-Token' : '3c58773cd224860cd286736fdf0eea952d83bcc1',
         },
       });
